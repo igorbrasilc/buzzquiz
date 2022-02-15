@@ -22,7 +22,7 @@ function checkIfMadeQuizzes() {
                 <p><span>Quizz do Homer sdadasdsa dsad sa sad asd sad ad asd sa das</span></p>
             </article>
         </div>
-        `
+        `;
     }
 }
 
