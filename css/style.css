@@ -15,37 +15,61 @@ html {
     --max-width-create: 1051px;
     --width-quiz: 90vw;
     --height-quiz: 181px;
-    --height-header: 11vh;
+    --height-header-span: 9vh;
+    --height-header-quiz-page: 18vh;
 
-    --position-top-my-quizzes: calc(var(--height-header) + 31px);
+    --position-top-my-quizzes: calc(var(--height-header-span) + 31px);
     --position-top-all-quizzes: 38px;
     --position-inner-text-quizzes: 75%;
 }
 
 header {
-    height: var(--height-header);
     width: 100vw;
     background-color: var(--color-bg-header);
-
+    
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1;
-
+    
     box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
 }
 
 header span {
+    min-height: var(--height-header-span);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     font-weight: 700;
     font-style: normal;
     font-size: 37px;
     line-height: 43px;
     color: var(--color-text-header);
+}
+
+header span.quiz_page_header {
+    width: 100%;
+    height: var(--height-header-quiz-page);
+    background: linear-gradient(
+        0deg, 
+        rgba(0, 0, 0, 0.57) 0.20%, 
+        rgba(0, 0, 0, 0.57)), 
+        url("../img/castle.png");
+    
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.quiz_page_header h2 {
+    font-size: 19px;
 }
 
 main {
@@ -149,5 +173,11 @@ article {
 }
 
 
+
+/* Utilities */
+
+.hide {
+    display: none;
+}
 
 
