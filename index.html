@@ -16,7 +16,7 @@
 
     <!-- Aqui vai o header -->
     <header>
-        <span>BuzzQuizz</span>
+        <span onclick="returnHome()">BuzzQuizz</span>
         <span class="quiz-page-header hide">
             <h2>O quão Potterhead é você?</h2>
         </span>
@@ -30,42 +30,7 @@
         <section class="all-quizzes">
             <p>Todos os Quizzes</p>
             <div class="all-quizzes-container">
-                <article onclick="openQuiz()">
-                    <div class="bg-gradient">
-                        <img src="./img/homer-simpson.jpeg" alt="imagem-quiz"/>
-                        <p><span>Quizz do Homer sdadasdsa dsad sa sad asd sad ad asd sa das</span></p>
-                    </div>
-                </article>
-                <article onclick="openQuiz()">
-                    <div class="bg-gradient">
-                        <img src="./img/homer-simpson.jpeg" alt="imagem-quiz"/>
-                        <p><span>Quizz do Homer sdadasdsa dsad sa sad asd sad ad asd sa das</span></p>
-                    </div>
-                </article>
-                <article onclick="openQuiz()">
-                    <div class="bg-gradient">
-                        <img src="./img/homer-simpson.jpeg" alt="imagem-quiz"/>
-                        <p><span>Quizz do Homer sdadasdsa dsad sa sad asd sad ad asd sa das</span></p>
-                    </div>
-                </article>
-                <article onclick="openQuiz()">
-                    <div class="bg-gradient">
-                        <img src="./img/homer-simpson.jpeg" alt="imagem-quiz"/>
-                        <p><span>Quizz do Homer sdadasdsa dsad sa sad asd sad ad asd sa das</span></p>
-                    </div>
-                </article>
-                <article onclick="openQuiz()">
-                    <div class="bg-gradient">
-                        <img src="./img/homer-simpson.jpeg" alt="imagem-quiz"/>
-                        <p><span>Quizz do Homer sdadasdsa dsad sa sad asd sad ad asd sa das</span></p>
-                    </div>
-                </article>
-                <article onclick="openQuiz()">
-                    <div class="bg-gradient">
-                        <img src="./img/homer-simpson.jpeg" alt="imagem-quiz"/>
-                        <p><span>Quizz do Homer sdadasdsa dsad sa sad asd sad ad asd sa das</span></p>
-                    </div>
-                </article>
+            <!-- inserido dinamicamente -->
             </div>
         </section>
     </main>
@@ -74,6 +39,11 @@
         
     </section>
 
+    <section class="create-quiz-page">
+        <!-- inserido dinamicamente -->
+    </section>
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script src="./js/script.js"></script>
 </body>
