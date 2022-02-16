@@ -276,9 +276,10 @@ header span.quiz-page-header {
 
 .quiz-page article {
     width: 375px;
-    height: 436px;
 
     padding: 18px;
+
+    margin-bottom: 26px;
 
     display: flex;
     flex-direction: column;
@@ -306,17 +307,22 @@ header span.quiz-page-header {
 .quiz-page article section {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
+    margin-top: 13px;
 }
 
-.quiz-page article section>div {
+.quiz-page .left, .quiz-page .right{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    background-color: blue;
+}
 
+.quiz-page .left{
+    margin-right: 12px;
+}
+
+.left>div, .right>div{
+    margin-bottom: 12px;
     position: relative;
-
-    margin-top: 13px;
 }
 
 .quiz-page .white-cover {    
@@ -328,8 +334,10 @@ header span.quiz-page-header {
 }
 
 .quiz-page img {
-    width: 163px;
-    height: 113px;
+    max-width: 163px;
+    max-height: 113px;
+    min-width: 163px;
+    min-height: 113px;
     object-fit: cover;
 }
 
