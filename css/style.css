@@ -9,7 +9,7 @@ html {
     --color-bg-header: #EC362D;
     --color-text-header: #fff;
     --color-bg-body: #FAFAFA;
-    --color-border-quiz: #E5E5E5;
+    --color-border-quiz: #D4D4D4;
 
     --max-width-quiz: 340px;
     --max-width-create: 1051px;/*  */
@@ -247,56 +247,6 @@ main {
     right: 21px;
 }
 
-/* .bg-gradient {
-    background: linear-gradient(
-        rgba(255, 255, 255, 0),
-        rgba(0, 0, 0, 0.5),
-        #000000);
-} */
-
-@media (min-width: 1100px) {
-
-    .all-quizzes-container {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-
-    .create-first-quiz {
-        max-width: var(--max-width-create);
-    }
-
-    .all-quizzes {
-        max-width: calc(var(--max-width-create) + 16px);
-    }
-
-    .all-quizzes-container article {
-        padding-right: 15px;
-    }
-
-    .created-quizzes-header {
-        max-width: var(--max-width-create);
-        justify-content: flex-start;
-    }
-
-    .created-quizzes-header p {
-        margin-right: 26px;
-    }
-
-    .created-quizzes {
-        flex-direction: row;
-        flex-wrap: wrap;
-
-        max-width: calc(var(--max-width-create) + 16px);
-    }
-
-    .created-quiz {
-        padding-right: 15px;
-    }
-
-    .created-quizzes article:last-child {
-        margin-bottom: 14px;
-    }
-}
 
 
 /* Quiz page */
