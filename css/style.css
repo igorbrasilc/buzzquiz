@@ -251,14 +251,9 @@ main {
 
 /* Quiz page */
 
-header span.quiz-page-header {
+span.quiz-page-header {
     width: 100%;
     height: var(--height-header-quiz-page);
-    background: linear-gradient(
-        0deg, 
-        rgba(0, 0, 0, 0.57) 0.20%, 
-        rgba(0, 0, 0, 0.57)), 
-        url("../img/castle.png");
     
     background-size: cover;
     background-repeat: no-repeat;
@@ -291,7 +286,6 @@ header span.quiz-page-header {
 .quiz-page article header {
     width: 100%;
     height: 89px;
-    background-color: #434CA0;
     
     position: static;   
     z-index: 0; 
@@ -310,10 +304,11 @@ header span.quiz-page-header {
     margin-top: 13px;
 }
 
+
+
 .quiz-page .left, .quiz-page .right{
     display: flex;
     flex-direction: column;
-    background-color: blue;
 }
 
 .quiz-page .left{
@@ -349,6 +344,38 @@ header span.quiz-page-header {
     font-size: 13px;
 }
 
+
+/* last article */
+.quiz-page article:last-child {
+    width: 375px;
+
+    padding: 18px;
+
+    margin-bottom: 26px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background-color: paleturquoise;
+}
+
+.quiz-page article:last-child img {
+    max-width: 100%;
+    width: 100%;
+    max-height: 100%;
+    height: 100%;
+
+    margin-top: 32px;
+    border: 5px solid #ff0000;
+}
+
+.quiz-page article:last-child p {
+    margin-top: 9px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #484848;
+}
 
 /* Utilities */
 

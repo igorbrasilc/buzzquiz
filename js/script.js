@@ -111,7 +111,6 @@ function checkIfMadeQuizzes() {
 checkIfMadeQuizzes();
 
 function openQuiz() {
-    console.log('clicou');
     const quizHeader = document.querySelector(".quiz-page-header");
     const main = document.querySelector("main");
     const quizPage = document.querySelector(".quiz-page");
@@ -119,17 +118,17 @@ function openQuiz() {
     main.classList.toggle("hide");
     quizPage.classList.toggle("hide");
     quizHeader.classList.toggle("hide");
+    quizMake();
 }
 
 
 
 /* Comportamento de respostas */
 function answerSelection(answer){
-    console.log('clicou');
     const coverSelection = answer.querySelector('.white-cover');
     const pSelection = answer.querySelector('p');
 
-    const section = answer.parentNode;
+    const section = document.querySelector('.quiz-page');
     const coverList = section.querySelectorAll('.white-cover');
     const pList = section.querySelectorAll('p');
 
@@ -143,7 +142,6 @@ function answerSelection(answer){
             coverList[i].classList.remove('success-quiz-answer-selection');
             pList[i].classList.remove('error-quiz-answer-selection');
             pList[i].classList.add('success-quiz-answer-selection');
-            console.log(pList[i]);
         }
     } 
 }
@@ -153,19 +151,43 @@ function quizMake(){
     const title = QUIZ_TESTE.title;
     const imgHeader = QUIZ_TESTE.image;
 
+    const levels = QUIZ_TESTE.levels;
     let questions = QUIZ_TESTE.questions;
     questions = shuffleArray(questions);
 
     const documentImgHeader = document.querySelector('.quiz-page-header');
     const documentTitle = document.querySelector('header h2');
 
+    documentImgHeader.style.backgroundImage = `linear-gradient(
+      0deg, 
+      rgba(0, 0, 0, 0.57) 0.20%, 
+      rgba(0, 0, 0, 0.57)), 
+      url("${imgHeader}")`;
+
     documentTitle.innerHTML = title;
 
-    const quizPage = document.querySelector('.quiz-page');
+    for(let j = 0; j < 1; j++){
+      const levelTitle = levels[j].title;
+      const levelImage = levels[j].image;
+      const levelText = levels[j].text;
+      const quizPage = document.querySelector('.quiz-page');
+  
+      for(let i = 0; i < questions.length; i++){
+          quizPage.innerHTML += questionMake(questions[i]);
+          const header = quizPage.querySelector('article:last-child header');
+          header.style.backgroundColor = `${questions[i].color}`;
+      }
 
-    for(let i = 0; i < questions.length; i++){
-        quizPage.innerHTML += questionMake(questions[i]);
+      console.log(levelImage + ' ' + levelTitle + ' ' + levelText);
+  
+      quizPage.innerHTML += `
+      <article>
+        <header>${levelTitle}</header>
+        <img src="${levelImage}"></img>
+        <p>${levelText}</p>
+      </article>`;
     }
+
 
 }
 
