@@ -231,8 +231,8 @@ function quizMake(){
 
     documentImgHeader.style.backgroundImage = `linear-gradient(
       0deg, 
-      rgba(0, 0, 0, 0.57) 0.20%, 
-      rgba(0, 0, 0, 0.57)), 
+      rgba(0, 0, 0, 0.6) ,
+      rgba(0, 0, 0, 0.6)), 
       url("${imgHeader}")`;
 
     documentTitle.innerHTML = title;
