@@ -58,14 +58,14 @@ function renderQuizzes(response) {
     const data = response.data;
 
     data.forEach(quiz => {
-        containerAllQuizzes.innerHTML += `
+      containerAllQuizzes.innerHTML += `
         <article onclick="loadQuizFromServer(${quiz.id})">
-            <div class="bg-gradient">
-                <img src="${quiz.image}" alt="imagem-quiz"/>
-                <p><span>${quiz.title}</span></p>
-            </div>
+          <div class="bg-gradient">
+          </div>
+          <img src="${quiz.image}" alt="imagem-quiz"/>
+          <p><span>${quiz.title}</span></p>
         </article>
-        `;
+      `;
     })
 }
 
