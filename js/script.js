@@ -160,12 +160,13 @@ function assembleQuizzes(quizFromServer){
   let questions = quiz.questions;
   questions = shuffleArray(questions);
 
-  const level = levels.shift();
-  const levelTitle = level.title;
-  const levelImage = level.image;
-  const levelText = level.text;
+  const levelTitle = levels[0].title;
+  const levelColor = levels[0].color;
+  const levelImage = levels[0].image;
+  const levelText = levels[0].text;
 
   const quizPage = document.querySelector('.quiz-page');
+  quizPage.innerHTML = '';
 
   questions.forEach((question) => {
     quizPage.innerHTML += assembleQuestions(question);
@@ -180,8 +181,21 @@ function assembleQuizzes(quizFromServer){
       <p>${levelText}</p>
     </article>`;
 
+  const header = quizPage.querySelector('article:last-child header');
+  header.style.backgroundColor = `"${levelColor}"`;
+
+  quizPage.innerHTML += `
+    <div class="quiz-result">
+      <button>Reiniciar Quizz</button>
+      <button onclick="openQuiz()">Voltar para home</button>
+    </div>`
   
   openQuiz();
+}
+
+
+function showScore(quizPage){
+
 }
 
 function assembleQuestions(question){

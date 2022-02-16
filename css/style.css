@@ -346,7 +346,7 @@ span.quiz-page-header {
 
 
 /* last article */
-.quiz-page article:last-child {
+.quiz-page article:nth-last-child(2) {
     width: 375px;
 
     padding: 18px;
@@ -356,52 +356,48 @@ span.quiz-page-header {
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    background-color: paleturquoise;
 }
 
-.quiz-page article:last-child img {
+.quiz-page article:nth-last-child(2) img {
     max-width: 100%;
     width: 100%;
     max-height: 100%;
     height: 100%;
 
-    margin-top: 32px;
-    border: 5px solid #ff0000;
+    margin-top: 9px;
 }
 
-.quiz-page article:last-child p {
+.quiz-page article:nth-last-child(2) p {
     margin-top: 9px;
     font-size: 17px;
     font-weight: 700;
     color: #484848;
 }
 
-/* Utilities */
+.quiz-page>div {
+    display: flex;
+    flex-direction: column;
 
-.hide {
-    display: none;
+    margin-top: 34px;
 }
 
-.white-cover.success-quiz-answer-selection {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
+/* Reiniciar ou Home */
+.quiz-page button{
+    width: 220.32px;
+    height: 44px;
+    font-size: 18px;
 
-    background-color: #fff;
-    opacity: 0.6;
+    border: none;
+    border-radius: 15px;
+
+    margin-bottom: 8px;
+    background-color: #EC362D;
+    color: #FFF5F4;
 }
 
-p.error-quiz-answer-selection {
-    color: #FF4B4B;
-
-}
-
-p.success-quiz-answer-selection {
-    color: #009C22;
-
+div button:last-child {
+    background-color: var(--color-bg-body);
+    color: #818181;    
 }
 
 /* Quiz page creator */
@@ -418,13 +414,13 @@ p.success-quiz-answer-selection {
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    
     background-color: var(--color-text-header);
     width: 100vw;
     max-width: 600px;
     padding-top: 21px;
     padding-bottom: 24px;
-
+    
 }
 
 .create-quiz-page h1 {
@@ -448,7 +444,7 @@ p.success-quiz-answer-selection {
     font-size: 19px;
     line-height: 22px;
     color: #BABABA;
-
+    
     border-radius: 5px;
     border: 1px solid #D1D1D1;
 }
@@ -478,3 +474,30 @@ p.success-quiz-answer-selection {
     cursor: pointer;
 }
 
+
+/* Utilities */
+
+.hide {
+    display: none;
+}
+
+.white-cover.success-quiz-answer-selection {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: #fff;
+    opacity: 0.6;
+}
+
+p.error-quiz-answer-selection {
+    color: #FF4B4B;
+
+}
+
+p.success-quiz-answer-selection {
+    color: #009C22;
+
+}
