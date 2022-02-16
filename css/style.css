@@ -8,7 +8,7 @@ html {
     /* variáveis globais */
     --color-bg-header: #EC362D;
     --color-text-header: #fff;
-    --color-bg-body: #E5E5E5;
+    --color-bg-body: #FAFAFA;
     --color-border-quiz: #E5E5E5;
 
     --max-width-quiz: 340px;
@@ -369,6 +369,14 @@ header span.quiz-page-header {
     margin-top: 13px;
 }
 
+.quiz-page .white-cover {    
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .quiz-page img {
     width: 163px;
     height: 113px;
@@ -390,7 +398,7 @@ header span.quiz-page-header {
     display: none;
 }
 
-.white-cover.error-quiz-answer-selection {
+.white-cover.success-quiz-answer-selection {
     width: 100%;
     height: 100%;
     position: absolute;
