@@ -90,29 +90,69 @@ function createQuizScreen1() {
     `;
 }
 
-// function createQuizNextScreens(btn) {
-//     const btnClass = btn.classList;
-//     const btnText = btn.innerHTML;
-//     const inputTitle = document.querySelector(".create-quiz-page .title").value;
-//     const inputURL = document.querySelector(".create-quiz-page .url").value;
-//     const inputQuestionQtd = document.querySelector(".create-quiz-page .question-qtd").value;
-//     const inputLevelQtd = document.querySelector(".create-quiz-page .level-qtd").value;
+function createQuizNextScreens(btn) {
+    const btnClass = btn.classList;
+    const btnText = btn.innerHTML;
 
-//     CREATEDQUIZOBJECT = {
-//         title: inputTitle,
-//         URL: inputURL,
-//         questionQtd: inputQuestionQtd,
-//         levelQtd: inputLevelQtd
-//     }
+    // inputs de perguntas básicas:
+    const inputTitle = document.querySelector(".create-quiz-page .title").value;
+    const inputURL = document.querySelector(".create-quiz-page .url").value;
+    const inputQuestionQtd = document.querySelector(".create-quiz-page .question-qtd").value;
+    const inputLevelQtd = document.querySelector(".create-quiz-page .level-qtd").value;
 
-//     // Validations
-//     const titleOK = CREATEDQUIZOBJECT.title.length >= 20 && CREATEDQUIZOBJECT.title.length <= 65;
+    // inputs de perguntas:
+    const inputTextQuestion1 = document.querySelector(".create-quiz-page .question-1");
 
-//     if (btnClass.contains("btn-create-screen-1")) {
-//         console.log(CREATEDQUIZOBJECT);
-//     }
-// }
+    CREATEDQUIZOBJECT = {
+        title: inputTitle,
+        image: inputURL
+    }
 
+    // Validations
+    const titleOK = CREATEDQUIZOBJECT.title.length >= 20 && CREATEDQUIZOBJECT.title.length <= 65;
+    const urlOK = validURL(inputURL);
+    const questionQtdOK = inputQuestionQtd >= 3;
+    const levelQtdOK = inputLevelQtd >= 2;
+
+    if (btnClass.contains("btn-create-screen-1")) {
+      if (titleOK && urlOK && questionQtdOK && levelQtdOK) {
+          createQuizScreen2(inputQuestionQtd);
+        } else {
+          alert("Preencha os dados corretamente!");
+        }
+    } else if (btnClass.contains("btn-create-screen-2")) {
+
+    }
+}
+
+function createQuizScreen2(questionQtd) {
+  const pageCreate = document.querySelector(".create-quiz-page");
+  pageCreate.innerHTML = `
+  <h1>Crie suas perguntas</h1>
+  `;
+  
+  for (let i = 0; i < questionQtd; i++) {
+    pageCreate.innerHTML += `
+    <div id="${i+1}" class="edit-question" onclick="editQuestion(this)">
+        <h1>Pergunta ${i+1}</h1>
+        <img src="./img/Vector.svg" alt="edit-question-icon"/>
+    </div>
+    `;
+  }
+
+  pageCreate.innerHTML += `<button type="submit" class="btn-create-screen-2" onclick="createQuizNextScreens(this)">Prosseguir pra criar níveis</button>`;
+}
+
+// Função para validar uma URL
+function validURL(str) {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return !!pattern.test(str);
+}
 
 /* Comportamento de respostas */
 function answerSelection(answer){
