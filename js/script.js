@@ -1,83 +1,3 @@
-const QUIZ_TESTE = {
-    "id": 2254,
-    "title": "Quem é você na fila do pão",
-    "image": "https://miro.medium.com/max/1200/1*CT3u9Zejnbzdg36CI5zxDg.jpeg",
-    "questions": [
-      {
-        "title": "Título da pergunta 1",
-        "color": "#123456",
-        "answers": [
-          {
-            "text": "Texto da resposta 1",
-            "image": "https://http.cat/411.jpg",
-            "isCorrectAnswer": true
-          },
-          {
-            "text": "Texto da resposta 2",
-            "image": "https://http.cat/412.jpg",
-            "isCorrectAnswer": false
-          }
-        ]
-      },
-      {
-        "title": "Título da pergunta 2",
-        "color": "#123456",
-        "answers": [
-          {
-            "text": "Texto da resposta 1",
-            "image": "https://http.cat/411.jpg",
-            "isCorrectAnswer": true
-          },
-          {
-            "text": "Texto da resposta 2",
-            "image": "https://http.cat/412.jpg",
-            "isCorrectAnswer": false
-          }
-        ]
-      },
-      {
-        "title": "Título da pergunta 3",
-        "color": "#123456",
-        "answers": [
-          {
-            "text": "Texto da resposta 1",
-            "image": "https://http.cat/411.jpg",
-            "isCorrectAnswer": true
-          },
-          {
-            "text": "Texto da resposta 2",
-            "image": "https://http.cat/412.jpg",
-            "isCorrectAnswer": false
-          }
-        ]
-      }
-    ],
-    "levels": [
-      {
-        "title": "Título do nível 1",
-        "image": "https://http.cat/411.jpg",
-        "text": "Descrição do nível 1",
-        "minValue": 0
-      },
-      {
-        "title": "Título do nível 2",
-        "image": "https://http.cat/412.jpg",
-        "text": "Descrição do nível 2",
-        "minValue": 50
-      }
-    ]
-  };
-
-
-
-
-
-
-
-
-
-
-
 
 
 let madeQuizzes = null;
@@ -123,7 +43,6 @@ function openQuiz() {
     MAIN.classList.toggle("hide");
     quizPage.classList.toggle("hide");
     quizHeader.classList.toggle("hide");
-    quizMake();
 }
 
 // Disponibilização dos quizzes do servidor ao entrar na tela inicial:
@@ -140,7 +59,7 @@ function renderQuizzes(response) {
 
     data.forEach(quiz => {
         containerAllQuizzes.innerHTML += `
-        <article onclick="openQuiz()">
+        <article onclick="loadQuizFromServer(${quiz.id})">
             <div class="bg-gradient">
                 <img src="${quiz.image}" alt="imagem-quiz"/>
                 <p><span>${quiz.title}</span></p>
@@ -218,60 +137,63 @@ function answerSelection(answer){
     } 
 }
 
-function quizMake(){
-    const title = QUIZ_TESTE.title;
-    const imgHeader = QUIZ_TESTE.image;
 
-    const levels = QUIZ_TESTE.levels;
-    let questions = QUIZ_TESTE.questions;
-    questions = shuffleArray(questions);
-
-    const documentImgHeader = document.querySelector('.quiz-page-header');
-    const documentTitle = document.querySelector('header h2');
-
-    documentImgHeader.style.backgroundImage = `linear-gradient(
-      0deg, 
-      rgba(0, 0, 0, 0.6) ,
-      rgba(0, 0, 0, 0.6)), 
-      url("${imgHeader}")`;
-
-    documentTitle.innerHTML = title;
-
-    for(let j = 0; j < 1; j++){
-      const levelTitle = levels[j].title;
-      const levelImage = levels[j].image;
-      const levelText = levels[j].text;
-      const quizPage = document.querySelector('.quiz-page');
-  
-      for(let i = 0; i < questions.length; i++){
-          quizPage.innerHTML += questionMake(questions[i]);
-          const header = quizPage.querySelector('article:last-child header');
-          header.style.backgroundColor = `${questions[i].color}`;
-      }
-
-      console.log(levelImage + ' ' + levelTitle + ' ' + levelText);
-  
-      quizPage.innerHTML += `
-      <article>
-        <header>${levelTitle}</header>
-        <img src="${levelImage}"></img>
-        <p>${levelText}</p>
-      </article>`;
-    }
-
-
+function loadQuizFromServer(id){
+  const promise = axios.get(`${CONSTAPI}/quizzes/${id}`);
+  promise.then(assembleQuizzes);
+  promise.catch(console.error());
 }
 
-function questionMake(question){
+function assembleQuizzes(quizFromServer){
+  const documentImgHeader = document.querySelector('.quiz-page-header');
+  const documentTitle = document.querySelector('header h2');
+  
+  const quiz = quizFromServer.data;
+
+  documentImgHeader.style.backgroundImage = `linear-gradient(
+      0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+      url("${quiz.image}")`;
+
+  documentTitle.innerHTML = quiz.title;
+  
+  const levels = quiz.levels;
+  let questions = quiz.questions;
+  questions = shuffleArray(questions);
+
+  const level = levels.shift();
+  const levelTitle = level.title;
+  const levelImage = level.image;
+  const levelText = level.text;
+
+  const quizPage = document.querySelector('.quiz-page');
+
+  questions.forEach((question) => {
+    quizPage.innerHTML += assembleQuestions(question);
+    const header = quizPage.querySelector('article:last-child header');
+    header.style.backgroundColor = `${question.color}`;
+  })
+
+  quizPage.innerHTML += `
+    <article>
+      <header>${levelTitle}</header>
+      <img src="${levelImage}"></img>
+      <p>${levelText}</p>
+    </article>`;
+
+  
+  openQuiz();
+}
+
+function assembleQuestions(question){
     return `<article>
         <header>${question.title}?</header>
         <section>
-        ${answerMake(question.answers)}
+        ${assembleAnswer(question.answers)}
         </section>
     </article>`;
 }
 
-function answerMake(answers){
+function assembleAnswer(answers){
     let output = '';
     for(let i = 0; (i + 1)  < answers.length; i+=2){
       const img1 = answers[i].image;
