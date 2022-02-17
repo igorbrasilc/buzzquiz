@@ -372,3 +372,17 @@ function resetQuiz() {
   assembleQuizzes(QUIZ_FROM_SERVER);
   window.scrollTo(0,0);
 }
+
+
+/* Amazenar informações */
+function storeQuizId(id){
+  const dataStoring = localStorage.getItem('myLocal');
+  let dataConversion = [];
+  if(dataStoring){
+    dataConversion = JSON.parse(dataStoring);
+  }
+
+  dataConversion.push(id);
+  dataConversion = JSON.stringify(dataConversion);
+  localStorage.setItem('myLocal', dataConversion);
+}
