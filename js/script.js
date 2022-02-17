@@ -5,6 +5,15 @@ const MAIN = document.querySelector("main");
 let CREATEDQUIZOBJECT = {};
 const CONSTAPI = "https://mock-api.driven.com.br/api/v4/buzzquizz";
 
+/* Comportamento de respostas do quiz*/
+let QUIZ_FROM_SERVER;
+let currentQuiz;
+const quizPage = document.querySelector('.quiz-page');
+let questionList = [];
+let correctAnswers = 0;
+
+
+
 // Checa ao abrir o site se já existem quizzes criados pelo usuário
 function checkIfMadeQuizzes() {
   const containerMyQuizzes = document.querySelector(".my-quizzes");
@@ -38,8 +47,6 @@ checkIfMadeQuizzes();
 
 function openQuiz() {
   const quizHeader = document.querySelector(".quiz-page-header");
-  const quizPage = document.querySelector(".quiz-page");
-
   MAIN.classList.toggle("hide");
   quizPage.classList.toggle("hide");
   quizHeader.classList.toggle("hide");
@@ -114,143 +121,64 @@ function createQuizScreen1() {
 // }
 
 
-/* Comportamento de respostas */
-const questionList = [];
-const questionObj = { question: '', isCorrectAnswer: false };
+/* Montagem da página de perguntas de um quiz */
 
-function answerSelection(answerSelected, isCorrectAnswer) {
-  let documentSection = answerSelected.parentNode;
-  documentSection = documentSection.parentNode;
-
-  // se não foi escolhida nenhuma resposta do cartão
-  if (!isSelected(documentSection)) {
-    questionObj.question = documentSection;
-    questionObj.isCorrectAnswer = isCorrectAnswer;
-
-
-    questionList.push(questionObj);
-
-    const coverSelection = answerSelected.querySelector('.white-cover');
-
-    const documentArticle = documentSection.parentNode;
-    const coverList = documentArticle.querySelectorAll('.white-cover');
-    const answerList = documentSection.querySelectorAll('.answer-quiz');
-
-    // altera cor do text da resposta erradas e certas
-    for(let i = 0; i < answerList.length; i++){
-      if(answerList[i].id === 'true'){
-        answerList[i].querySelector('p').classList.add('success-quiz-answer-selection');
-      }
-      else{
-        answerList[i].querySelector('p').classList.add('error-quiz-answer-selection');
-      }      
-    }
-
-    // adiciona fundo branco nas resposta não selecionadas
-    for (let i = 0; i < coverList.length; i++) {
-      if (coverList[i] !== coverSelection) {
-        coverList[i].classList.add('unselected');
-      }
-    }
-  }
-
-
-
-
-  /*  pList[i].classList.add('error-quiz-answer-selection');
-   pList[i].classList.remove('success-quiz-answer-selection'); */
-}
-
-
-function isSelected(questionSelected) {
-  console.log(questionList);
-  for (let i = 0; i < questionList.length; i++) {
-    
-   /*  console.log('verificou');
-    console.log(questionList[i].question);
-    console.log("selecionado");
-    console.log(questionSelected); */
-    if (questionList[i].question === questionSelected) return true;
-  }
-  return false;
-}
-
+let qtdQuestions = 0;
 
 function loadQuizFromServer(id) {
   const promise = axios.get(`${CONSTAPI}/quizzes/${id}`);
   promise.then(assembleQuizzes);
   promise.catch(console.error());
+  openQuiz();
 }
 
+
 function assembleQuizzes(quizFromServer) {
+  QUIZ_FROM_SERVER = quizFromServer;
+  /* ATENÇÂO: criar função para zerar quiz */
+  quizPage.innerHTML = '';
+
+  currentQuiz = quizFromServer.data;
+
   const documentImgHeader = document.querySelector('.quiz-page-header');
-  const documentTitle = document.querySelector('header h2');
-
-  const quiz = quizFromServer.data;
-
   documentImgHeader.style.backgroundImage = `linear-gradient(
       0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
-      url("${quiz.image}")`;
+      url("${currentQuiz.image}")
+  `;
 
-  documentTitle.innerHTML = quiz.title;
+  const documentTitle = document.querySelector('header h2');
+  documentTitle.innerHTML = currentQuiz.title;
 
-  const levels = quiz.levels;
-  let questions = quiz.questions;
+  let questions = currentQuiz.questions;
+  qtdQuestions = questions.length;
+
   questions = shuffleArray(questions);
-
-  const levelTitle = levels[0].title;
-  const levelColor = levels[0].color;
-  const levelImage = levels[0].image;
-  const levelText = levels[0].text;
-
-  const quizPage = document.querySelector('.quiz-page');
-  quizPage.innerHTML = '';
 
   questions.forEach((question) => {
     quizPage.innerHTML += assembleQuestions(question);
     const header = quizPage.querySelector('article:last-child header');
     header.style.backgroundColor = `${question.color}`;
   })
-
-  quizPage.innerHTML += `
-    <article>
-      <header>${levelTitle}</header>
-      <img src="${levelImage}"></img>
-      <p>${levelText}</p>
-    </article>`;
-
-  const header = quizPage.querySelector('article:last-child header');
-  header.style.backgroundColor = `"${levelColor}"`;
-
-  quizPage.innerHTML += `
-    <div class="quiz-result">
-      <button>Reiniciar Quizz</button>
-      <button onclick="openQuiz()">Voltar para home</button>
-    </div>`
-
-  openQuiz();
 }
 
-
-function showScore(quizPage) {
-
-}
 
 function assembleQuestions(question) {
-  return `<article>
+  return `
+    <article>
         <header>${question.title}?</header>
         <section>
         ${assembleAnswer(question.answers)}
         </section>
-    </article>`;
+    </article>
+  `;
 }
+
 
 function assembleAnswer(answers) {
   let rightDiv = '';
   let leftDiv = '';
 
   for (let i = 0; (i + 1) < answers.length; i += 2) {
-
 
     const img1 = answers[i].image;
     const describe1 = answers[i].text;
@@ -273,14 +201,14 @@ function assembleAnswer(answers) {
         <p>${describe2}</p>
         <div class="white-cover"></div>
       </div>`;
-
   }
 
   rightDiv = `<div class="right">${rightDiv}</div>`;
   leftDiv = `<div class="left">${leftDiv}</div>`;
-  return leftDiv + rightDiv;
 
+  return leftDiv + rightDiv;
 }
+
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -292,4 +220,109 @@ function shuffleArray(array) {
     array[j] = aux;
   }
   return array;
+}
+
+/* Comportamento de respostas do quiz*/
+
+function answerSelection(answerSelected, isCorrectAnswer) {
+  let documentSection = answerSelected.parentNode;
+  documentSection = documentSection.parentNode;
+
+  // se não foi escolhida nenhuma resposta do cartão
+  if (!isSelected(documentSection)) {
+    // não finalizou ainda
+    if (questionList.length <= qtdQuestions) {
+      console.log('entrou')
+
+      questionList.push({ question: documentSection, isCorrectAnswer: isCorrectAnswer });
+
+      const coverSelection = answerSelected.querySelector('.white-cover');
+
+      const documentArticle = documentSection.parentNode;
+      const coverList = documentArticle.querySelectorAll('.white-cover');
+      const answerList = documentSection.querySelectorAll('.answer-quiz'); // mudar para documenteArticle
+
+      // altera cor do text da resposta erradas e certas
+      for (let i = 0; i < answerList.length; i++) {
+        if (answerList[i].id === 'true') {
+          answerList[i].querySelector('p').classList.add('success-quiz-answer-selection');
+
+          if (answerList[i] === answerSelected) correctAnswers++;// Se a resposta correta é igual a selecionada
+        }
+        else {
+          answerList[i].querySelector('p').classList.add('error-quiz-answer-selection');
+        }
+      }
+
+      // adiciona fundo branco nas resposta não selecionadas
+      for (let i = 0; i < coverList.length; i++) {
+        if (coverList[i] !== coverSelection) {
+          coverList[i].classList.add('unselected');
+        }
+      }
+
+      if (qtdQuestions === questionList.length) {
+        setTimeout(showScore, 2000);
+      }
+    }
+  }
+}
+
+
+function isSelected(questionSelected) {
+  let out;
+  questionList.forEach(question => {
+    if (question.question === questionSelected) out = true;
+    else out = false;
+  });
+  return out;
+}
+
+
+function showScore() {
+  const levels = currentQuiz.levels;
+  let currentLevel;
+
+  console.log(qtdQuestions + " " + correctAnswers);
+
+  const hitPercent = Math.floor((100 / qtdQuestions) * correctAnswers);
+
+
+  levels.forEach(level => {
+    if (level.minValue <= hitPercent) {
+      currentLevel = level;
+    }
+  })
+
+  const levelTitle = `${hitPercent} de acerto: ${currentLevel.title}`;
+  const levelColor = currentLevel.color;
+  const levelImage = currentLevel.image;
+  const levelText = currentLevel.text;
+  quizPage.innerHTML += `
+  <article>
+    <header>${levelTitle}</header>
+    <img src="${levelImage}"></img>
+    <p>${levelText}</p>
+  </article>`;
+
+  const header = quizPage.querySelector('article:last-child header');
+  header.style.backgroundColor = `"${levelColor}"`;
+
+  quizPage.innerHTML += `
+  <div class="quiz-result">
+    <button onclick="resetQuiz()">Reiniciar Quizz</button>
+    <button onclick="comeBackHome()">Voltar para home</button>
+  </div>`;
+}
+
+function comeBackHome() {
+  window.location.reload();
+  openQuiz();
+}
+
+function resetQuiz() {
+  currentQuiz = undefined;
+  questionList = [];
+  correctAnswers = 0;
+  assembleQuizzes(QUIZ_FROM_SERVER);
 }
