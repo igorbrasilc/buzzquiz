@@ -157,6 +157,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    
 }
 
 .all-quizzes-container img {
@@ -447,10 +448,12 @@ div button:last-child {
     font-size: 20px;
     line-height: 24px;
 
-    padding-left: 90px;
-    padding-right: 90px;
     padding-top: 37px;
     padding-bottom: 29px; 
+}
+
+.container-questions h1 {
+    width: 95%
 }
 
 .container-questions input {
@@ -472,6 +475,7 @@ div button:last-child {
     width: 80vw;
     max-width: 368px;
     margin-top: 30px;
+    margin-bottom: 100px;
     padding: 15px;
     border-radius: 15px;
     border: none;
@@ -482,6 +486,19 @@ div button:last-child {
     font-size: 18px;
     line-height: 21px;
     color: #FFF5F4;
+}
+
+.edit-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 95%;
+    max-width: 600px;
+    background-color: var(--color-text-header);
+    padding-right: 25px;
+    padding-left: 17px;
+    margin-bottom: 24px;
 }
 
 
