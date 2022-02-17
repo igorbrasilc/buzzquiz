@@ -345,11 +345,13 @@ function showScore() {
   quizPage.innerHTML += `
   <article class="show-score">
     <header>${levelTitle}</header>
-    <img src="${levelImage}"></img>
-    <p>${levelText}</p>
+      <section>
+      <img src="${levelImage}"></img>
+      <p>${levelText}</p>
+    </section>
   </article>`;
 
-  const header = quizPage.querySelector('article:last-child header');
+  const header = quizPage.querySelector('article.show-score header');
   header.style.backgroundColor = `"${levelColor}"`;
 
   quizPage.innerHTML += `
