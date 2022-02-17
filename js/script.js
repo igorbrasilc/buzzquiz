@@ -166,6 +166,7 @@ function validURL(str) {
 let qtdQuestions = 0;
 
 function loadQuizFromServer(id) {
+  console.log(`${CONSTAPI}/quizzes/${id}`);
   const promise = axios.get(`${CONSTAPI}/quizzes/${id}`);
   promise.then(assembleQuizzes);
   promise.catch(console.error());
@@ -175,7 +176,6 @@ function loadQuizFromServer(id) {
 
 function assembleQuizzes(quizFromServer) {
   QUIZ_FROM_SERVER = quizFromServer;
-  /* ATENÇÂO: criar função para zerar quiz */
   quizPage.innerHTML = '';
 
   currentQuiz = quizFromServer.data;
@@ -269,10 +269,15 @@ function answerSelection(answerSelected, isCorrectAnswer) {
   documentSection = documentSection.parentNode;
 
   // se não foi escolhida nenhuma resposta do cartão
+  console.log(' func é igual? ' + isSelected(documentSection));
   if (!isSelected(documentSection)) {
     // não finalizou ainda
     if (questionList.length <= qtdQuestions) {
-      console.log('entrou')
+      const article = documentSection.parentNode;
+
+      setTimeout(()=>{
+        window.scrollBy(0, article.clientHeight + 26)
+      }, 2000);
 
       questionList.push({ question: documentSection, isCorrectAnswer: isCorrectAnswer });
 
@@ -310,20 +315,19 @@ function answerSelection(answerSelected, isCorrectAnswer) {
 
 
 function isSelected(questionSelected) {
-  let out;
-  questionList.forEach(question => {
-    if (question.question === questionSelected) out = true;
-    else out = false;
-  });
-  return out;
+  for(let i = 0; i < questionList.length; i++){
+    if(questionList[i].question === questionSelected){
+      return true;
+    }
+  }
+
+  return false;
 }
 
 
 function showScore() {
   const levels = currentQuiz.levels;
   let currentLevel;
-
-  console.log(qtdQuestions + " " + correctAnswers);
 
   const hitPercent = Math.floor((100 / qtdQuestions) * correctAnswers);
 
@@ -339,7 +343,7 @@ function showScore() {
   const levelImage = currentLevel.image;
   const levelText = currentLevel.text;
   quizPage.innerHTML += `
-  <article>
+  <article class="show-score">
     <header>${levelTitle}</header>
     <img src="${levelImage}"></img>
     <p>${levelText}</p>
@@ -353,6 +357,7 @@ function showScore() {
     <button onclick="resetQuiz()">Reiniciar Quizz</button>
     <button onclick="comeBackHome()">Voltar para home</button>
   </div>`;
+  quizPage.querySelector('.show-score').scrollIntoView();
 }
 
 function comeBackHome() {
@@ -365,4 +370,5 @@ function resetQuiz() {
   questionList = [];
   correctAnswers = 0;
   assembleQuizzes(QUIZ_FROM_SERVER);
+  window.scrollTo(0,0);
 }
