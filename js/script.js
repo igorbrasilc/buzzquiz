@@ -264,7 +264,11 @@ function createQuizNextScreens(btn) {
         alert("É necessário que um dos levels tenha % minima igual a 0");
         levelRateOK = false;
       } else {
-        levelRateOK = true;
+        if (levelRateRange) {
+          levelRateOK = true;
+        } else {
+          levelRateOK = false;
+        }
       }
 
       if (titleLevelOK && levelRateOK && levelURLOK && levelDescriptionOK) {
