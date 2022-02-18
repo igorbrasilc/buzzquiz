@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,16 +8,18 @@
     <title>I&P's BuzzQuizz</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">   
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/media.css">
 </head>
+
 <body>
 
     <!-- Aqui vai o header -->
     <header>
-        <span onclick="cQ()">BuzzQuizz</span>
+        <span onclick="returnHome()">BuzzQuizz</span>
         <span class="quiz-page-header hide">
             <h2>O quão Potterhead é você?</h2>
         </span>
@@ -25,12 +28,22 @@
     <!-- Aqui vai o container dos quizzes próprios  -->
     <main>
         <section class="my-quizzes">
-            <!-- inserido dinamicamente -->
+            <article class="create-first-quiz">
+                <p>Você não criou nenhum quizz ainda :(</p>
+                <p><span onclick="createQuizScreen1()">Criar Quizz</span></p>
+            </article>
+            <div class="created-quizzes-header hide">
+                <p>Seus Quizzes</p>
+                <ion-icon name="add-circle"></ion-icon>
+            </div>
+            <div class="all-quizzes-container">
+                <!-- inserido dinamicamente -->
+            </div>
         </section>
         <section class="all-quizzes">
             <p>Todos os Quizzes</p>
             <div class="all-quizzes-container">
-            <!-- inserido dinamicamente -->
+                <!-- inserido dinamicamente -->
             </div>
         </section>
     </main>
@@ -51,4 +64,5 @@
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script src="./js/script.js"></script>
 </body>
+
 </html>

@@ -23,7 +23,8 @@ html {
     --height-quiz: 181px;
     --height-header-span: 69px;
     --height-header-quiz-page: 142px;
-    --position-top-my-quizzes: calc(var(--height-header-span) + 31px);
+    --distance-header-myquizzes: 31px;
+    --position-top-my-quizzes: calc(var(--height-header-span) + var(--distance-header-myquizzes));
     --position-top-all-quizzes: 38px;
     --position-inner-text-quizzes: 75%;
     --margin-top-quiz-page: calc((var(--height-header-quiz-page) + var(--height-header-span)) + 24px);
@@ -104,6 +105,9 @@ header span:first-child:hover {
 /* tela de entrada quando não há criação de quiz ainda */
 
 .my-quizzes {
+    display: flex;
+    flex-direction: column;
+
     width: 100%;
     margin-top: var(--position-top-my-quizzes);
 }
@@ -147,87 +151,13 @@ header span:first-child:hover {
 }
 
 
-/* todos os quizzes do servidor */
-
-.all-quizzes {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    width: 100%;
-    margin-top: var(--position-top-all-quizzes);
-    border-radius: 5px;
-}
-
-.all-quizzes p {
-    width: 100%;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 23px;
-    margin-bottom: 14px;
-}
-
-.all-quizzes-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.all-quizzes-container article {
-    width: var(--width-quiz);
-    height: var(--height-quiz);
-    margin-bottom: 14px;
-    position: relative;
-    border-radius: 5px;
-}
-
-.all-quizzes-container article:hover {
-    cursor: pointer;
-    box-shadow: 0 0 20px -3px rgba(0, 0, 0, 0.5);
-}
-
-.bg-gradient {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    background-image: linear-gradient( 180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 65.62%, rgba(0, 0, 0, 0.8) 100%), url(image.png);
-    border-radius: 5px;
-}
-
-.bg-gradient:hover {
-    background-image: linear-gradient( 180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.3) 65.62%, rgba(0, 0, 0, 0.5) 100%), url(image.png);
-}
-
-.all-quizzes-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 5px;
-}
-
-.all-quizzes p span {
-    font-size: 19px;
-    font-weight: normal;
-    line-height: 22px;
-    color: #fff;
-    position: absolute;
-    z-index: 2;
-    bottom: 15%;
-    left: 18px;
-    right: 21px;
-}
-
-
 /* Quizzes criados pelo usuario */
 
 .created-quizzes-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    
     width: var(--width-quiz);
     margin-bottom: 14px;
 }
@@ -276,6 +206,82 @@ header span:first-child:hover {
     right: 21px;
 }
 
+
+
+/* todos os quizzes do servidor */
+
+.all-quizzes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+    margin-top: var(--position-top-all-quizzes);
+    border-radius: 5px;
+}
+
+.all-quizzes p {
+    width: 100%;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 23px;
+    margin-bottom: 14px;
+}
+
+.all-quizzes-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.all-quizzes-container article{
+    width: var(--width-quiz);
+    height: var(--height-quiz);
+
+    margin-bottom: 14px;
+    position: relative;
+    border-radius: 5px;
+}
+
+.all-quizzes-container article:hover {
+    cursor: pointer;
+    box-shadow: 0 0 20px -3px rgba(0, 0, 0, 0.5);
+}
+
+.bg-gradient {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-image: linear-gradient( 180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 65.62%, rgba(0, 0, 0, 0.8) 100%), url(image.png);
+    border-radius: 5px;
+}
+
+.bg-gradient:hover {
+    background-image: linear-gradient( 180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.3) 65.62%, rgba(0, 0, 0, 0.5) 100%), url(image.png);
+}
+
+.all-quizzes-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 5px;
+}
+
+.all-quizzes-container p span {
+    font-size: 19px;
+    font-weight: normal;
+    line-height: 22px;
+    color: #fff;
+    position: absolute;
+    z-index: 2;
+    bottom: 15%;
+    left: 18px;
+    right: 21px;
+}
 
 /* Quiz page */
 
@@ -520,6 +526,11 @@ div button:last-child {
     color: #BABABA;
     border-radius: 5px;
     border: 1px solid #D1D1D1;
+}
+
+.container-questions input::selection {
+    font-style: normal;
+    color: #727272;
 }
 
 .create-quiz-page button {
