@@ -447,11 +447,13 @@ function showScore() {
   quizPage.innerHTML += `
   <article class="show-score">
     <header>${levelTitle}</header>
-    <img src="${levelImage}"></img>
-    <p>${levelText}</p>
+      <section>
+      <img src="${levelImage}"></img>
+      <p>${levelText}</p>
+    </section>
   </article>`;
 
-  const header = quizPage.querySelector('article:last-child header');
+  const header = quizPage.querySelector('article.show-score header');
   header.style.backgroundColor = `"${levelColor}"`;
 
   quizPage.innerHTML += `
@@ -475,6 +477,21 @@ function resetQuiz() {
   window.scrollTo(0,0);
 }
 
+<<<<<<< HEAD
 function returnHome() {
   window.location.reload();
+=======
+
+/* Amazenar informações */
+function storeQuizId(id){
+  const dataStoring = localStorage.getItem('myLocal');
+  let dataConversion = [];
+  if(dataStoring){
+    dataConversion = JSON.parse(dataStoring);
+  }
+
+  dataConversion.push(id);
+  dataConversion = JSON.stringify(dataConversion);
+  localStorage.setItem('myLocal', dataConversion);
+>>>>>>> c8fa6370e8c8f029553cd3ce584ba7d6a63e31a1
 }
