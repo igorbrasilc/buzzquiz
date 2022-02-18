@@ -276,6 +276,7 @@ function loadQuizFromServer(id) {
   loading();
   promise.then(assembleQuizzes);
   promise.catch(console.error());
+  
   openQuiz();
 }
 
@@ -306,6 +307,7 @@ function assembleQuizzes(quizFromServer) {
     header.style.backgroundColor = `${question.color}`;
   })
   
+  window.scrollTo(0,0);
   loading();
 }
 
@@ -465,7 +467,7 @@ function showScore() {
   quizPage.innerHTML += `
   <div class="quiz-result">
     <button onclick="resetQuiz()">Reiniciar Quizz</button>
-    <button onclick="comeBackHome()">Voltar para home</button>
+    <button onclick="returnHome()">Voltar para home</button>
   </div>`;
   quizPage.querySelector('.show-score').scrollIntoView();
 }
@@ -473,10 +475,6 @@ function showScore() {
 
 
 /* Utilities */
-function comeBackHome() {
-  window.location.reload();
-  openQuiz();
-}
 
 function resetQuiz() {
   loading();
@@ -488,7 +486,9 @@ function resetQuiz() {
 }
 
 function returnHome() {
+  loading();
   window.location.reload();  
+  loading();
 }
 
 function loading(){
