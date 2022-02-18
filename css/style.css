@@ -33,7 +33,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: var(--width-main);
     background-color: var(--color-bg-body);
 }
 
@@ -95,21 +94,23 @@ header span.quiz_page_header {
 
 /* tela de entrada quando não há criação de quiz ainda */
 
+.my-quizzes {
+    width: 100%;
+    margin-top: var(--position-top-my-quizzes);
+}
+
 .create-first-quiz {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 
+    width: 100%;
+    height: var(--height-quiz);
+    
     border: 1px dashed var(--color-border-quiz);
     margin: auto;
-    width: var(--width-quiz);
-    height: var(--height-quiz);
     border-radius: 5px;
-}
-
-.my-quizzes {
-    margin-top: var(--position-top-my-quizzes);
 }
 
 .create-first-quiz p {
