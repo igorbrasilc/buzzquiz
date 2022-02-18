@@ -58,6 +58,10 @@
         font-size: 21px;
     }
 
+    .edit-question {
+        width: 600px;
+    }
+
     /* .all-quizzes-container {
         flex-direction: row;
         flex-wrap: wrap;

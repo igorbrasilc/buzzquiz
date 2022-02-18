@@ -2,7 +2,12 @@
 
 let madeQuizzes = null;
 const MAIN = document.querySelector("main");
-let CREATEDQUIZOBJECT = {};
+let CREATEDQUIZOBJECT = {
+  title: null,
+  image: null,
+  questions: null,
+  levels: null
+};
 const CONSTAPI = "https://mock-api.driven.com.br/api/v4/buzzquizz";
 let QUESTION_QTD = 0;
 let LEVEL_QTD = 0;
@@ -105,7 +110,7 @@ function createQuizNextScreens(btn) {
     const btnClass = btn.classList;
     const btnText = btn.innerHTML;
 
-    // inputs de perguntas básicas:
+    // tela de perguntas basicas:
     if (btnClass.contains("btn-create-screen-1")) {
     const inputTitle = document.querySelector(".create-quiz-page .title").value;
     const inputURL = document.querySelector(".create-quiz-page .url").value;
@@ -130,6 +135,7 @@ function createQuizNextScreens(btn) {
     // inputs de perguntas:
     const questions = [];
 
+    // tela de perguntas do quiz a ser criado:
     if (btn.classList.contains("btn-create-screen-2")) {
     for (let i = 0; i < QUESTION_QTD; i++) {
       let questionObject = {
@@ -156,47 +162,72 @@ function createQuizNextScreens(btn) {
       questions.push(questionObject);
     }
 
-     // Validations questions
-     let titleQuestionOK;
-     let colorOK;
-     let answerQtdOK;
-     let countAnswerNotNull = 0;
-     let countAnswerURLOK = 0;
-     let answerURLOK;
-     let questionsValidated;
- 
-     for (let i = 0; i < questions.length; i++) {
-       titleQuestionOK = questions[i].title.length >= 20;
-       colorOK = validColorHEX(questions[i].color);
-       let answersNotNull = questions[i].answers.forEach(() => {
-         if (questions[i].answers.text !== null) {
-           countAnswerNotNull += 1;
-         }
- 
-         if (validURL(questions[i].answers.image) === true) {
-           countAnswerURLOK += 1;
-         }
-       });
-       answerQtdOK = countAnswerNotNull >= 2;
-       answerURLOK = (countAnswerURLOK === countAnswerNotNull);
- 
-       if (titleQuestionOK && colorOK && answerQtdOK && answerURLOK) {
-         questionsValidated += 1;
-       }
-     }
+    console.log("questions" + questions);
 
-     if (questionsValidated === QUESTION_QTD) {
+     // Validations questions
+    let titleQuestionOK;
+    let colorOK;
+    let answerQtdOK;
+    let answerURLOK;
+    let questionsValidated = 0;
+
+    for (let i = 0; i < questions.length; i++) {
+      titleQuestionOK = questions[i].title.length >= 20;
+      console.log("titleOK " + titleQuestionOK);
+      colorOK = validColorHEX(questions[i].color);
+      console.log("colorOK " + colorOK);
+      let countAnswerNotNull = 0;
+      let countAnswerURLOK = 0;
+
+      for (let j = 0; j < 4; j++) {
+        const inputURL = questions[i].answers[j].image;
+        console.log("input URL Imagem " + inputURL);
+        const urlOK = validURL(inputURL);
+        console.log("validação url " + urlOK);
+
+        if (questions[i].answers[j].title !== null) {
+          countAnswerNotNull += 1;
+        }
+        
+        if (urlOK === true) {
+          countAnswerURLOK += 1;
+        }
+      }
+
+      console.log("countNotNull " + countAnswerNotNull);
+      console.log("countURL " + countAnswerURLOK);
+
+      if (countAnswerNotNull >= 2) {
+        answerQtdOK = true;
+      } else {
+        answerQtdOK = false;
+        alert("Deve ter no minimo 2 questões escritas em cada pergunta");
+      }
+
+      if (countAnswerURLOK === countAnswerNotNull) {
+      answerURLOK = true;
+      } else {
+        answerURLOK = false;
+        alert(`Verifique a URL da imagem da pergunta ${i+1}`);
+      }
+
+      if (titleQuestionOK && colorOK && answerURLOK && answerQtdOK) {
+        questionsValidated += 1;
+      }
+    }
+
+    console.log("qValidated " + questionsValidated);
+
+    if (questionsValidated * 1 === QUESTION_QTD * 1) {
       createQuizScreen3(LEVEL_QTD);
     } else {
       alert("Preencha os dados corretamente!");
     }
   }
 
-    // CREATEDQUIZOBJECT = {
-    //     title: inputTitle,
-    //     image: inputURL,
-    //     questions: questions
-    // }
+  // tela de niveis:
+
+
 }
 
 function createQuizScreen2(questionQtd) {
@@ -233,7 +264,28 @@ function createQuizScreen2(questionQtd) {
 }
 
 function createQuizScreen3(levelQtd) {
-  alert("Opa, acho que foi");
+  const pageCreate = document.querySelector(".create-quiz-page");
+  pageCreate.innerHTML = `
+  <h1>Agora, decida os níveis!</h1>
+  `;
+  
+  for (let i = 0; i < levelQtd; i++) {
+    pageCreate.innerHTML += `
+    <div class="container-questions hide container-q${i+1}">
+        <h1 onclick="alreadyEditedQuestion(this, ${i+1})">Nível ${i+1} <span>(Clique novamente para resumir)</span></h1>
+        <input type="text" placeholder="Título do nível" class="level${i+1}-title"/>
+        <input type="number" placeholder="% de acerto mínima" class="level${i+1}-rate"/>
+        <input type="url" placeholder="URL da imagem do nível" class="level${i+1}-img"/>
+        <input type="text" placeholder="Descrição do nivel" class="level${i+1}-description description"/>
+    </div>
+    <div class="edit-question id${i+1}" onclick="editQuestion(this, ${i+1})">
+        <h1>Nível ${i+1}</h1>
+        <img src="./img/Vector.svg" alt="edit-question-icon"/>
+    </div>
+    `;
+  }
+
+  pageCreate.innerHTML += `<button type="submit" class="btn-create-screen-3" onclick="createQuizNextScreens(this)">Finalizar Quizz</button>`;
 }
 
 function editQuestion(question, id) {
