@@ -27,12 +27,17 @@ html {
     --position-top-all-quizzes: 38px;
     --position-inner-text-quizzes: 75%;
     --margin-top-quiz-page: calc((var(--height-header-quiz-page) + var(--height-header-span)) + 24px);
+
+    --loadding-dimension: 30vh;
 }
 
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    height: 100vh;
+
     background-color: var(--color-bg-body);
 }
 
@@ -500,6 +505,21 @@ div button:last-child {
     background-color: var(--color-bg-header);
     color: var(--color-bg-body);
     cursor: pointer;
+}
+
+/* Loadding screen */
+.load-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: var(--width-quiz-page);
+    height: 100%;
+}
+
+.load-screen img {
+    width: var(--loadding-dimension);
+    height: var(--loadding-dimension);
 }
 
 

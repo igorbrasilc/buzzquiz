@@ -97,6 +97,7 @@ function createQuizScreen1() {
     `;
 }
 
+
 function createQuizNextScreens(btn) {
     const btnClass = btn.classList;
     const btnText = btn.innerHTML;
