@@ -4,6 +4,8 @@ let madeQuizzes = null;
 const MAIN = document.querySelector("main");
 let CREATEDQUIZOBJECT = {};
 const CONSTAPI = "https://mock-api.driven.com.br/api/v4/buzzquizz";
+let QUESTION_QTD = 0;
+let LEVEL_QTD = 0;
 
 /* Comportamento de respostas do quiz*/
 let QUIZ_FROM_SERVER;
@@ -11,7 +13,6 @@ let currentQuiz;
 const quizPage = document.querySelector('.quiz-page');
 let questionList = [];
 let correctAnswers = 0;
-
 
 
 // Checa ao abrir o site se já existem quizzes criados pelo usuário
@@ -54,6 +55,7 @@ function openQuiz() {
 
 // Disponibilização dos quizzes do servidor ao entrar na tela inicial:
 const promiseGetQuizzes = axios.get(`${CONSTAPI}/quizzes`);
+loading();
 promiseGetQuizzes.then(renderQuizzes);
 promiseGetQuizzes.catch(error => {
   console.error(error.response);
@@ -74,6 +76,7 @@ function renderQuizzes(response) {
         </article>
       `;
   })
+  loading();
 }
 
 
@@ -103,34 +106,97 @@ function createQuizNextScreens(btn) {
     const btnText = btn.innerHTML;
 
     // inputs de perguntas básicas:
+    if (btnClass.contains("btn-create-screen-1")) {
     const inputTitle = document.querySelector(".create-quiz-page .title").value;
     const inputURL = document.querySelector(".create-quiz-page .url").value;
     const inputQuestionQtd = document.querySelector(".create-quiz-page .question-qtd").value;
     const inputLevelQtd = document.querySelector(".create-quiz-page .level-qtd").value;
 
-    // inputs de perguntas:
-    const inputTextQuestion1 = document.querySelector(".create-quiz-page .question-1");
-
-    CREATEDQUIZOBJECT = {
-        title: inputTitle,
-        image: inputURL
-    }
-
-    // Validations
-    const titleOK = CREATEDQUIZOBJECT.title.length >= 20 && CREATEDQUIZOBJECT.title.length <= 65;
+    // Validations basic questions
+    const titleOK = inputTitle.length >= 20 && inputTitle.length <= 65;
     const urlOK = validURL(inputURL);
     const questionQtdOK = inputQuestionQtd >= 3;
     const levelQtdOK = inputLevelQtd >= 2;
 
-    if (btnClass.contains("btn-create-screen-1")) {
-      if (titleOK && urlOK && questionQtdOK && levelQtdOK) {
-          createQuizScreen2(inputQuestionQtd);
-        } else {
-          alert("Preencha os dados corretamente!");
-        }
-    } else if (btnClass.contains("btn-create-screen-2")) {
-
+    if (titleOK && urlOK && questionQtdOK && levelQtdOK) {
+      QUESTION_QTD = inputQuestionQtd;
+      LEVEL_QTD = inputLevelQtd;
+      createQuizScreen2(QUESTION_QTD);
+    } else {
+      alert("Preencha os dados corretamente!");
     }
+    }
+
+    // inputs de perguntas:
+    const questions = [];
+
+    if (btn.classList.contains("btn-create-screen-2")) {
+    for (let i = 0; i < QUESTION_QTD; i++) {
+      let questionObject = {
+        title: document.querySelector(`.q${i+1}-text`).value,
+        color: document.querySelector(`.q${i+1}-color`).value,
+        answers: [{
+          text: document.querySelector(`.q${i+1}-answer`).value,
+          image: document.querySelector(`.q${i+1}-answer-img`).value,
+          isCorrectAnswer: true
+        }, {
+          text: document.querySelector(`.q${i+1}-wrong-answer1`).value,
+          image: document.querySelector(`.q${i+1}-wrong-answer-img1`).value,
+          isCorrectAnswer: false
+        }, {
+          text: document.querySelector(`.q${i+1}-wrong-answer2`).value,
+          image: document.querySelector(`.q${i+1}-wrong-answer-img2`).value,
+          isCorrectAnswer: false
+        }, {
+          text: document.querySelector(`.q${i+1}-wrong-answer3`).value,
+          image: document.querySelector(`.q${i+1}-wrong-answer-img3`).value,
+          isCorrectAnswer: false
+        }]
+      }
+      questions.push(questionObject);
+    }
+
+     // Validations questions
+     let titleQuestionOK;
+     let colorOK;
+     let answerQtdOK;
+     let countAnswerNotNull = 0;
+     let countAnswerURLOK = 0;
+     let answerURLOK;
+     let questionsValidated;
+ 
+     for (let i = 0; i < questions.length; i++) {
+       titleQuestionOK = questions[i].title.length >= 20;
+       colorOK = validColorHEX(questions[i].color);
+       let answersNotNull = questions[i].answers.forEach(() => {
+         if (questions[i].answers.text !== null) {
+           countAnswerNotNull += 1;
+         }
+ 
+         if (validURL(questions[i].answers.image) === true) {
+           countAnswerURLOK += 1;
+         }
+       });
+       answerQtdOK = countAnswerNotNull >= 2;
+       answerURLOK = (countAnswerURLOK === countAnswerNotNull);
+ 
+       if (titleQuestionOK && colorOK && answerQtdOK && answerURLOK) {
+         questionsValidated += 1;
+       }
+     }
+
+     if (questionsValidated === QUESTION_QTD) {
+      createQuizScreen3(LEVEL_QTD);
+    } else {
+      alert("Preencha os dados corretamente!");
+    }
+  }
+
+    // CREATEDQUIZOBJECT = {
+    //     title: inputTitle,
+    //     image: inputURL,
+    //     questions: questions
+    // }
 }
 
 function createQuizScreen2(questionQtd) {
@@ -141,7 +207,22 @@ function createQuizScreen2(questionQtd) {
   
   for (let i = 0; i < questionQtd; i++) {
     pageCreate.innerHTML += `
-    <div id="${i+1}" class="edit-question" onclick="editQuestion(this)">
+    <div class="container-questions hide container-q${i+1}">
+        <h1 onclick="alreadyEditedQuestion(this, ${i+1})">Pergunta ${i+1} <span>(Clique novamente para resumir)</span></h1>
+        <input type="text" placeholder="Texto da pergunta" class="q${i+1}-text"/>
+        <input type="text" placeholder="Cor de fundo da pergunta" class="q${i+1}-color"/>
+        <h1>Resposta correta</h1>
+        <input type="text" placeholder="Resposta correta" class="q${i+1}-answer"/>
+        <input type="url" placeholder="URL da imagem" class="q${i+1}-answer-img"/>
+        <h1>Respostas incorretas</h1>
+        <input type="text" placeholder="Resposta incorreta 1" class="q${i+1}-wrong-answer1"/>
+        <input type="url" placeholder="URL da imagem 1" class="q${i+1}-wrong-answer-img1"/>
+        <input type="text" placeholder="Resposta incorreta 2" class="q${i+1}-wrong-answer2"/>
+        <input type="url" placeholder="URL da imagem 2" class="q${i+1}-wrong-answer-img2"/>
+        <input type="text" placeholder="Resposta incorreta 3" class="q${i+1}-wrong-answer3"/>
+        <input type="url" placeholder="URL da imagem 3" class="q${i+1}-wrong-answer-img3"/>
+    </div>
+    <div class="edit-question id${i+1}" onclick="editQuestion(this, ${i+1})">
         <h1>Pergunta ${i+1}</h1>
         <img src="./img/Vector.svg" alt="edit-question-icon"/>
     </div>
@@ -149,6 +230,24 @@ function createQuizScreen2(questionQtd) {
   }
 
   pageCreate.innerHTML += `<button type="submit" class="btn-create-screen-2" onclick="createQuizNextScreens(this)">Prosseguir pra criar níveis</button>`;
+}
+
+function createQuizScreen3(levelQtd) {
+  alert("Opa, acho que foi");
+}
+
+function editQuestion(question, id) {
+  const expandedQuestion = question.parentNode.querySelector(`.container-q${id}`);
+
+  question.classList.toggle("hide");
+  expandedQuestion.classList.toggle("hide");
+}
+
+function alreadyEditedQuestion(question, id) {
+  const minimizedQuestion = document.querySelector(`.id${id}`);
+  
+  question.parentNode.classList.toggle("hide");
+  minimizedQuestion.classList.toggle("hide");
 }
 
 // Função para validar uma URL
@@ -162,6 +261,11 @@ function validURL(str) {
   return !!pattern.test(str);
 }
 
+function validColorHEX(str) {
+  let pattern = new RegExp('^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$');
+  return !!pattern.test(str);
+}
+
 /* Montagem da página de perguntas de um quiz */
 
 let qtdQuestions = 0;
@@ -169,6 +273,7 @@ let qtdQuestions = 0;
 function loadQuizFromServer(id) {
   console.log(`${CONSTAPI}/quizzes/${id}`);
   const promise = axios.get(`${CONSTAPI}/quizzes/${id}`);
+  loading();
   promise.then(assembleQuizzes);
   promise.catch(console.error());
   openQuiz();
@@ -200,6 +305,8 @@ function assembleQuizzes(quizFromServer) {
     const header = quizPage.querySelector('article:last-child header');
     header.style.backgroundColor = `${question.color}`;
   })
+  
+  loading();
 }
 
 
@@ -363,12 +470,16 @@ function showScore() {
   quizPage.querySelector('.show-score').scrollIntoView();
 }
 
+
+
+/* Utilities */
 function comeBackHome() {
   window.location.reload();
   openQuiz();
 }
 
 function resetQuiz() {
+  loading();
   currentQuiz = undefined;
   questionList = [];
   correctAnswers = 0;
@@ -376,11 +487,21 @@ function resetQuiz() {
   window.scrollTo(0,0);
 }
 
+function returnHome() {
+  window.location.reload();  
+}
+
+function loading(){
+  const loading = document.querySelector('.load-screen');
+  loading.classList.toggle('hide');
+}
+
 
 /* Amazenar informações */
 function storeQuizId(id){
   const dataStoring = localStorage.getItem('myLocal');
   let dataConversion = [];
+
   if(dataStoring){
     dataConversion = JSON.parse(dataStoring);
   }

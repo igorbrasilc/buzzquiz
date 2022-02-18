@@ -63,7 +63,7 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 3;
+    z-index: 4;
     background-color: var(--color-bg-header);
 }
 
@@ -94,6 +94,10 @@ header span.quiz_page_header {
     background: linear-gradient( 0deg, rgba(0, 0, 0, 0.57) 0.20%, rgba(0, 0, 0, 0.57)), url("../img/castle.png");
     background-size: cover;
     background-repeat: no-repeat;
+}
+
+header span:first-child:hover {
+    cursor: pointer;
 }
 
 
@@ -440,10 +444,16 @@ div button:last-child {
     flex-direction: column;
     align-items: center;
     background-color: var(--color-text-header);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
     width: 100vw;
     max-width: 600px;
     padding-top: 21px;
     padding-bottom: 24px;
+    margin-bottom: 24px;
+}
+
+.container-questions h1 span:hover {
+    cursor: pointer;
 }
 
 .create-quiz-page h1 {
@@ -456,6 +466,12 @@ div button:last-child {
 
 .container-questions h1 {
     width: 95%
+}
+
+.container-questions h1 span {
+    font-size: 12px;
+    color: var(--color-bg-header);
+    opacity: 0.6;
 }
 
 .container-questions input {
@@ -492,10 +508,17 @@ div button:last-child {
     justify-content: space-between;
     width: 95%;
     max-width: 600px;
-    background-color: var(--color-text-header);
+    background-color: #FFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+
     padding-right: 25px;
     padding-left: 17px;
     margin-bottom: 24px;
+}
+
+.edit-question:hover {
+    cursor: pointer;
+    background-color: rgba(248, 42, 42, 0.57)
 }
 
 
@@ -507,21 +530,28 @@ div button:last-child {
     cursor: pointer;
 }
 
+
 /* Loadding screen */
 .load-screen {
     display: flex;
     justify-content: center;
     align-items: center;
 
-    width: var(--width-quiz-page);
+    position: fixed;
+    z-index: 3;
+    top: var(--height-header-span);
+    bottom: 0;
+
+    width: 100%;
     height: 100%;
+
+    background-color: var(--color-bg-body);
 }
 
 .load-screen img {
     width: var(--loadding-dimension);
     height: var(--loadding-dimension);
 }
-
 
 /* Utilities */
 
