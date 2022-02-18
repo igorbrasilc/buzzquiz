@@ -516,13 +516,17 @@ div button:last-child {
     margin-bottom: 24px;
 }
 
-.edit-question:hover {
-    cursor: pointer;
-    background-color: rgba(248, 42, 42, 0.57)
+.description {
+    height: 177px;
 }
 
 
 /* CSS transform */
+
+.edit-question:hover {
+    cursor: pointer;
+    background-color: rgba(248, 42, 42, 0.57)
+}
 
 .create-first-quiz p span:hover {
     background-color: var(--color-bg-header);
