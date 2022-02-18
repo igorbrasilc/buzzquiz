@@ -524,7 +524,13 @@ function answerSelection(answerSelected, isCorrectAnswer) {
       const article = documentSection.parentNode;
 
       setTimeout(() => {
-        window.scrollBy(0, article.clientHeight + 26)
+        let count = 0;
+        const interval = setInterval(() => {
+          if(article.clientHeight + 26 < count) clearInterval(interval);
+          console.log(count)
+          count += 10;
+          window.scrollBy(0, 10);
+        }, 10);
       }, 2000);
 
       questionList.push({ question: documentSection, isCorrectAnswer: isCorrectAnswer });

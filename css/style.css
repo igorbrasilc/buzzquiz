@@ -302,8 +302,6 @@ span.quiz-page-header {
     align-items: center;
 
     margin-top: var(--margin-top-quiz-page);
-
-    scroll-behavior: smooth;
 }
 
 .quiz-page article {
