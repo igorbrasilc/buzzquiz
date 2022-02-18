@@ -162,7 +162,7 @@ function createQuizNextScreens(btn) {
       questions.push(questionObject);
     }
 
-    console.log("questions" + questions);
+    console.log("questions" + questions[0]);
 
      // Validations questions
     let titleQuestionOK;
@@ -173,35 +173,29 @@ function createQuizNextScreens(btn) {
 
     for (let i = 0; i < questions.length; i++) {
       titleQuestionOK = questions[i].title.length >= 20;
-      console.log("titleOK " + titleQuestionOK);
       colorOK = validColorHEX(questions[i].color);
-      console.log("colorOK " + colorOK);
       let countAnswerNotNull = 0;
       let countAnswerURLOK = 0;
 
       for (let j = 0; j < 4; j++) {
-        const inputURL = questions[i].answers[j].image;
-        console.log("input URL Imagem " + inputURL);
-        const urlOK = validURL(inputURL);
-        console.log("validação url " + urlOK);
 
-        if (questions[i].answers[j].title !== null) {
+        if (questions[i].answers[j].text !== '') {
           countAnswerNotNull += 1;
-        }
-        
-        if (urlOK === true) {
-          countAnswerURLOK += 1;
+
+          const inputURL = questions[i].answers[j].image;
+          const urlOK = validURL(inputURL);
+
+          if (urlOK === true) {
+            countAnswerURLOK += 1;
+          }
         }
       }
-
-      console.log("countNotNull " + countAnswerNotNull);
-      console.log("countURL " + countAnswerURLOK);
 
       if (countAnswerNotNull >= 2) {
         answerQtdOK = true;
       } else {
         answerQtdOK = false;
-        alert("Deve ter no minimo 2 questões escritas em cada pergunta");
+        alert("Deve ter no minimo 2 respostas escritas em cada pergunta");
       }
 
       if (countAnswerURLOK === countAnswerNotNull) {
@@ -215,8 +209,6 @@ function createQuizNextScreens(btn) {
         questionsValidated += 1;
       }
     }
-
-    console.log("qValidated " + questionsValidated);
 
     if (questionsValidated * 1 === QUESTION_QTD * 1) {
       createQuizScreen3(LEVEL_QTD);
