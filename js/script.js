@@ -162,8 +162,6 @@ function createQuizNextScreens(btn) {
       questions.push(questionObject);
     }
 
-    console.log("questions" + questions[0]);
-
      // Validations questions
     let titleQuestionOK;
     let colorOK;
@@ -218,7 +216,71 @@ function createQuizNextScreens(btn) {
     }
   }
 
+  
   // tela de niveis:
+
+  const levels = [];
+
+  if(btnClass.contains("btn-create-screen-3")) {
+    for (let i = 0; i < LEVEL_QTD; i++) {
+      let levelObject = {
+        title: document.querySelector(`.level${i+1}-title`).value,
+        image: document.querySelector(`.level${i+1}-img`).value,
+        text: document.querySelector(`.level${i+1}-description`).value,
+        minValue: document.querySelector(`.level${i+1}-rate`).value
+      }
+
+      levels.push(levelObject);
+    }
+
+    // Validation levels:
+    let titleLevelOK;
+    let levelRateOK;
+    let levelRateRange;
+    let levelRateZero;
+    let levelURLOK;
+    let levelDescriptionOK;
+    let levelIsValidated = 0;
+    let countRateZero = 0;
+
+    for (let i = 0; i < levels.length; i++) {
+      titleLevelOK = levels[i].title.length >= 10;
+      levelRateRange = levels[i].minValue * 1 >= 0 && levels[i].minValue * 1 <= 100;
+      levelRateZero = levels[i].minValue * 1 === 0;
+      const inputURL = levels[i].image;
+      levelURLOK = validURL(inputURL);
+      levelDescriptionOK = levels[i].text.length >= 30;
+
+      if (levelRateZero) {
+        countRateZero += 1;
+        levelRateOK = true;
+      } else if (levelRateRange) {
+        levelRateOK = true;
+      } else {
+        levelRateOK = false;
+      }
+
+      if (countRateZero < 1) {
+        alert("É necessário que um dos levels tenha % minima igual a 0");
+        levelRateOK = false;
+      } else {
+        levelRateOK = true;
+      }
+
+      if (titleLevelOK && levelRateOK && levelURLOK && levelDescriptionOK) {
+        levelIsValidated += 1;
+      } else {
+        alert(`Preencha corretamente o level ${i+1}`);
+      }
+    }
+
+    if (levelIsValidated * 1 === LEVEL_QTD * 1) {
+      createQuizScreen4();
+    } else {
+      levelIsValidated = 0;
+      alert("Preencha os dados novamente");
+    }
+  }
 
 
 }
@@ -279,6 +341,10 @@ function createQuizScreen3(levelQtd) {
   }
 
   pageCreate.innerHTML += `<button type="submit" class="btn-create-screen-3" onclick="createQuizNextScreens(this)">Finalizar Quizz</button>`;
+}
+
+function createQuizScreen4() {
+  alert("Opa, acho que foi");
 }
 
 function editQuestion(question, id) {
