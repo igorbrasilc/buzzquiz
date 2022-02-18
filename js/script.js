@@ -214,6 +214,7 @@ function createQuizNextScreens(btn) {
       createQuizScreen3(LEVEL_QTD);
     } else {
       alert("Preencha os dados corretamente!");
+      questionsValidated = 0;
     }
   }
 
