@@ -1,5 +1,4 @@
 
-
 let madeQuizzes = null;
 const MAIN = document.querySelector("main");
 let CREATEDQUIZOBJECT = {
@@ -13,6 +12,13 @@ let QUESTION_QTD = 0;
 let LEVEL_QTD = 0;
 
 /* Comportamento de respostas do quiz*/
+/* function cQ(){
+  console.log('imprimiu');
+  const promise = axios.post(`${CONSTAPI}/quizzes`, catQuiz);
+  promise.then(r => console.log(r));
+  promise.catch(r => console.log(r));
+} */
+
 let QUIZ_FROM_SERVER;
 let currentQuiz;
 const quizPage = document.querySelector('.quiz-page');
@@ -61,15 +67,37 @@ function openQuiz() {
 // Disponibilização dos quizzes do servidor ao entrar na tela inicial:
 const promiseGetQuizzes = axios.get(`${CONSTAPI}/quizzes`);
 loading();
-promiseGetQuizzes.then(renderQuizzes);
+promiseGetQuizzes.then(quizFilter);
 promiseGetQuizzes.catch(error => {
   console.error(error.response);
   alert("Não deu pra obter os quizzes, verifique o erro ou avise o devinho");
 })
 
-function renderQuizzes(response) {
+function quizFilter(promise){
+  const quizzes = promise.data;
+  let myQuizzes = [];
+  let serveQuizzes = [];
+
+  const storedQuizzes = JSON.parse(localStorage.getItem('myLocal'));
+
+  quizzes.forEach(quizz => {
+    const id = quizz.id;
+    if(storedQuizzes.indexOf(id) >= 0){
+      myQuizzes.push(quizz);
+    } else {
+      serveQuizzes.push(quizz);
+    }
+  })
+
+  renderQuiz(serveQuizzes);
+}
+
+function renderMyQuiz(response){
+
+}
+function renderQuiz(response) {
   const containerAllQuizzes = document.querySelector(".all-quizzes-container");
-  const data = response.data;
+  const data = response;
 
   data.forEach(quiz => {
     containerAllQuizzes.innerHTML += `
