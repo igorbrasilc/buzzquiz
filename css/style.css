@@ -439,11 +439,12 @@ div button:last-child {
     align-items: center;
     
     background-color: var(--color-text-header);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
     width: 100vw;
     max-width: 600px;
     padding-top: 21px;
     padding-bottom: 24px;
-    
+    margin-bottom: 24px;
 }
 
 .create-quiz-page h1 {
@@ -457,6 +458,12 @@ div button:last-child {
 
 .container-questions h1 {
     width: 95%
+}
+
+.container-questions h1 span {
+    font-size: 12px;
+    color: var(--color-bg-header);
+    opacity: 0.6;
 }
 
 .container-questions input {
@@ -498,7 +505,9 @@ div button:last-child {
 
     width: 95%;
     max-width: 600px;
-    background-color: var(--color-text-header);
+    background-color: #FFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+
     padding-right: 25px;
     padding-left: 17px;
     margin-bottom: 24px;
@@ -512,6 +521,20 @@ div button:last-child {
     color: var(--color-bg-body);
     cursor: pointer;
 }
+
+.edit-question:hover {
+    cursor: pointer;
+    background-color: rgba(248, 42, 42, 0.57)
+}
+
+.container-questions h1 span:hover {
+    cursor: pointer;
+}
+
+header span:first-child:hover {
+    cursor: pointer;
+}
+
 
 
 /* Utilities */
