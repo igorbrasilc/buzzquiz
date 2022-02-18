@@ -275,8 +275,7 @@ function loadQuizFromServer(id) {
   const promise = axios.get(`${CONSTAPI}/quizzes/${id}`);
   loading();
   promise.then(assembleQuizzes);
-  promise.catch(console.error());
-  
+  promise.catch(console.error());  
   openQuiz();
 }
 
@@ -325,32 +324,25 @@ function assembleQuestions(question) {
 
 
 function assembleAnswer(answers) {
+  let answerList = answers;
+  answerList = shuffleArray(answerList);
+
   let rightDiv = '';
   let leftDiv = '';
 
-  for (let i = 0; (i + 1) < answers.length; i += 2) {
+  for (let i = 0; i < answerList.length; i++) {
+    const answer = answerList[i];
+    const img = answer.image;
+    const describe = answer.text;
+    const isCorrect = answer.isCorrectAnswer;
 
-    const img1 = answers[i].image;
-    const describe1 = answers[i].text;
-    const isCorrect1 = answers[i].isCorrectAnswer;
+    if(i%2){
+      leftDiv += answerStruture(isCorrect, img, describe);
+    }
 
-    const img2 = answers[i + 1].image;
-    const describe2 = answers[i + 1].text;
-    const isCorrect2 = answers[i + 1].isCorrectAnswer;
-
-    leftDiv += `                 
-      <div id="${isCorrect1}" class="answer-quiz" onclick="answerSelection(this, this.id)">
-        <img src="${img1}" alt="">
-        <p>${describe1}</p>
-        <div class="white-cover"></div>
-      </div>`;
-
-    rightDiv += `
-      <div id="${isCorrect2}" class="answer-quiz" onclick="answerSelection(this, this.id)">
-        <img src="${img2}" alt="">
-        <p>${describe2}</p>
-        <div class="white-cover"></div>
-      </div>`;
+    else {
+      rightDiv += answerStruture(isCorrect, img, describe);
+    }
   }
 
   rightDiv = `<div class="right">${rightDiv}</div>`;
@@ -359,6 +351,14 @@ function assembleAnswer(answers) {
   return leftDiv + rightDiv;
 }
 
+function answerStruture(isCorrect, img, describe){
+  return `
+    <div id="${isCorrect}" class="answer-quiz" onclick="answerSelection(this, this.id)">
+      <img src="${img}" alt="">
+      <p>${describe}</p>
+      <div class="white-cover"></div>
+    </div>`;
+}
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
