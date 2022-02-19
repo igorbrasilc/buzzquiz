@@ -78,7 +78,18 @@ function renderMyQuiz(response) {
   const containerAllQuizzes = document.querySelector(".my-quizzes .all-quizzes-container");
 
   response.forEach(quiz => {
-    containerAllQuizzes.innerHTML += assembleQuizzes(quiz);
+    containerAllQuizzes.innerHTML += `
+      <article onclick="loadQuizFromServer(${quiz.id})">
+        <div class="bg-gradient">
+        </div>
+        <img src="${quiz.image}" alt="imagem-quiz"/>
+        <p><span>${quiz.title}</span></p>
+        <div class="opc">
+          <img src="../img/Vector-white.svg" alt="Editar">
+          <ion-icon name="trash-outline"></ion-icon>
+        </div>
+      </article>
+    `;
     const article = containerAllQuizzes.querySelector('article:last-child');
     article.setAttribute('class', 'my-quiz');
   })
@@ -89,13 +100,7 @@ function renderQuiz(response) {
   const containerAllQuizzes = document.querySelector(".all-quizzes .all-quizzes-container");
 
   response.forEach(quiz => {
-    containerAllQuizzes.innerHTML += assembleQuizzes(quiz);
-  })
-}
-
-
-function assembleQuizzes(quiz) {
-  return `
+    containerAllQuizzes.innerHTML += `
     <article onclick="loadQuizFromServer(${quiz.id})">
       <div class="bg-gradient">
       </div>
@@ -103,6 +108,7 @@ function assembleQuizzes(quiz) {
       <p><span>${quiz.title}</span></p>
     </article>
   `;
+  })
 }
 
 
