@@ -64,7 +64,7 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 4;
+    z-index: 5;
     background-color: var(--color-bg-header);
 }
 
@@ -110,6 +110,48 @@ header span:first-child:hover {
 
     width: 100%;
     margin-top: var(--position-top-my-quizzes);
+}
+
+.my-quizzes .opc {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+
+    width: 43px;
+    height: 87px;
+    padding: 8px 0;
+
+    position: absolute;
+    z-index: 4;
+    right: 0;
+    top: 9px;
+
+    border-radius: 10px 0 0 10px;
+
+    background-color: var(--color-bg-header);
+}
+
+.my-quizzes .opc:hover {
+    cursor: auto;
+}
+
+div.opc img {
+    width: 19px;
+    height: 19px;
+    margin-left: 3px;
+
+    object-fit: contain;
+    object-position: center;
+}
+
+div.opc ion-icon{
+    font-size: 22px;
+    color: #fff;
+}
+
+div.opc ion-icon:hover {
+    cursor: pointer;
 }
 
 .create-first-quiz {
