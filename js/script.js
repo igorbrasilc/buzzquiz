@@ -138,7 +138,7 @@ function createQuizNextScreens(btn) {
     const inputQuestionQtd = document.querySelector(".create-quiz-page .question-qtd").value;
     const inputLevelQtd = document.querySelector(".create-quiz-page .level-qtd").value;
 
-    // Validations basic questions
+    // Validations
     const titleOK = inputTitle.length >= 20 && inputTitle.length <= 65;
     const urlOK = validURL(inputURL);
     const questionQtdOK = inputQuestionQtd >= 3;
@@ -147,6 +147,8 @@ function createQuizNextScreens(btn) {
     if (titleOK && urlOK && questionQtdOK && levelQtdOK) {
       QUESTION_QTD = inputQuestionQtd;
       LEVEL_QTD = inputLevelQtd;
+      CREATEDQUIZOBJECT.title = inputTitle;
+      CREATEDQUIZOBJECT.image = inputURL;
       createQuizScreen2(QUESTION_QTD);
     } else {
       alert("Preencha os dados corretamente!");
@@ -230,6 +232,7 @@ function createQuizNextScreens(btn) {
     }
 
     if (questionsValidated * 1 === QUESTION_QTD * 1) {
+      CREATEDQUIZOBJECT.questions = questions;
       createQuizScreen3(LEVEL_QTD);
     } else {
       alert("Preencha os dados corretamente!");
@@ -261,7 +264,7 @@ function createQuizNextScreens(btn) {
     let levelRateZero;
     let levelURLOK;
     let levelDescriptionOK;
-    let levelIsValidated = 0;
+    let levelsValidated = 0;
     let countRateZero = 0;
 
     for (let i = 0; i < levels.length; i++) {
@@ -293,16 +296,17 @@ function createQuizNextScreens(btn) {
       }
 
       if (titleLevelOK && levelRateOK && levelURLOK && levelDescriptionOK) {
-        levelIsValidated += 1;
+        levelsValidated += 1;
       } else {
         alert(`Preencha corretamente o level ${i + 1}`);
       }
     }
 
-    if (levelIsValidated * 1 === LEVEL_QTD * 1) {
+    if (levelsValidated * 1 === LEVEL_QTD * 1) {
+      CREATEDQUIZOBJECT.levels = levels;
       createQuizScreen4();
     } else {
-      levelIsValidated = 0;
+      levelsValidated = 0;
       alert("Preencha os dados novamente");
     }
   }
@@ -369,7 +373,30 @@ function createQuizScreen3(levelQtd) {
 }
 
 function createQuizScreen4() {
-  alert("Opa, acho que foi");
+  const promise = axios.post(`${CONSTAPI}/quizzes`, CREATEDQUIZOBJECT);
+  promise.then(quiz => {
+
+    storeQuizId(quiz.data.id);
+
+    const pageCreate = document.querySelector(".create-quiz-page");
+    pageCreate.innerHTML = `
+    <h1>Seu quizz está pronto!</h1>
+    <article onclick="loadQuizFromServer(${quiz.data.id})" class="created-quiz-success">
+      <div class="bg-gradient">
+      </div>
+      <img src="${quiz.data.image}" alt="imagem-quiz"/>
+      <p><span>${quiz.data.title}</span></p>
+    </article>
+    <button type="submit" class="btn-access-quiz-created" onclick="loadQuizFromServer(${quiz.data.id})">Acessar Quizz</button>
+    <p onclick="returnHome()">Voltar pra home</p>
+    `;
+  })
+  promise.catch(error => {
+    alert("Deu erro na postagem do seu quizz");
+    console.error(error.response);
+  })
+
+  
 }
 
 function editQuestion(question, id) {
@@ -398,7 +425,7 @@ function validURL(str) {
 }
 
 function validColorHEX(str) {
-  let pattern = new RegExp('^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$');
+  let pattern = new RegExp('^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{6})$');
   return !!pattern.test(str);
 }
 
