@@ -48,11 +48,11 @@ function quizFilter(promise) {
   let serveQuizzes = [];
 
 
-  const storedQuizzes = JSON.parse(localStorage.getItem('myLocal'));
+  let storedQuizzes = JSON.parse(localStorage.getItem('myLocal'));
   quizzes.forEach(quizz => {
     const id = quizz.id;
     if (!storedQuizzes) storedQuizzes = [];
-    
+
     if(storedQuizzes.indexOf(id) >= 0) myQuizzes.push(quizz);
     else serveQuizzes.push(quizz);
   })
