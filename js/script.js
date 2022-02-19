@@ -52,7 +52,7 @@ function quizFilter(promise) {
   console.log(storedQuizzes);
   quizzes.forEach(quizz => {
     const id = quizz.id;
-    if (storeQuizId) {
+    if (storedQuizzes) {
       if(storedQuizzes.indexOf(id) >= 0) myQuizzes.push(quizz);
     } else {
       serveQuizzes.push(quizz);
