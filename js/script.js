@@ -10,14 +10,6 @@ const CONSTAPI = "https://mock-api.driven.com.br/api/v4/buzzquizz";
 let QUESTION_QTD = 0;
 let LEVEL_QTD = 0;
 
-/* Comportamento de respostas do quiz*/
-/* function cQ(){
-  console.log('imprimiu');
-  const promise = axios.post(`${CONSTAPI}/quizzes`, catQuiz);
-  promise.then(r => console.log(r));
-  promise.catch(r => console.log(r));
-} */
-
 let QUIZ_FROM_SERVER;
 let currentQuiz;
 const quizPage = document.querySelector('.quiz-page');
@@ -84,7 +76,7 @@ function renderMyQuiz(response) {
         </div>
         <img src="${quiz.image}" alt="imagem-quiz"/>
         <p><span>${quiz.title}</span></p>
-        <div class="opc">
+        <div onclick="nula()" class="opc">
           <img src="../img/Vector-white.svg" alt="Editar">
           <ion-icon name="trash-outline"></ion-icon>
         </div>
@@ -560,7 +552,7 @@ function answerSelection(answerSelected, isCorrectAnswer) {
           console.log(count)
           count += 10;
           window.scrollBy(0, 10);
-        }, 10);
+        }, 8);
       }, 2000);
 
       questionList.push({ question: documentSection, isCorrectAnswer: isCorrectAnswer });
@@ -591,7 +583,7 @@ function answerSelection(answerSelected, isCorrectAnswer) {
       }
 
       if (qtdQuestions === questionList.length) {
-        setTimeout(showScore, 2000);
+        setTimeout(showScore, 2300);
       }
     }
   }
@@ -643,7 +635,7 @@ function showScore() {
     <button onclick="resetQuiz()">Reiniciar Quizz</button>
     <button onclick="returnHome()">Voltar para home</button>
   </div>`;
-  quizPage.querySelector('.show-score').scrollIntoView();
+  //quizPage.querySelector('.show-score').scrollIntoView();
 }
 
 
@@ -683,4 +675,8 @@ function storeQuizId(id) {
   dataConversion.push(id);
   dataConversion = JSON.stringify(dataConversion);
   localStorage.setItem('myLocal', dataConversion);
+}
+
+function nula() {
+
 }
