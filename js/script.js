@@ -204,8 +204,9 @@ function createQuizNextScreens(btn) {
       let countAnswerNotNull = 0;
       let countAnswerURLOK = 0;
 
-      for (let j = 0; j < 4; j++) {
 
+      for (let j = 0; j < 4; j++) {
+        console.log(questions[i].answers[j].text);
         if (questions[i].answers[j].text !== '') {
           countAnswerNotNull += 1;
 
@@ -215,8 +216,9 @@ function createQuizNextScreens(btn) {
           if (urlOK === true) {
             countAnswerURLOK += 1;
           }
-        }
       }
+      console.log(countAnswerNotNull);
+      console.log(countAnswerURLOK);
 
       if (countAnswerNotNull >= 2) {
         answerQtdOK = true;
@@ -316,8 +318,7 @@ function createQuizNextScreens(btn) {
       alert("Preencha os dados novamente");
     }
   }
-
-
+}
 }
 
 function createQuizScreen2(questionQtd) {
@@ -401,8 +402,6 @@ function createQuizScreen4() {
     alert("Deu erro na postagem do seu quizz");
     console.error(error.response);
   })
-
-  
 }
 
 function editQuestion(question, id) {
