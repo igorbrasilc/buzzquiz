@@ -416,6 +416,7 @@ span.quiz-page-header {
     flex-direction: column;
     align-items: center;
 
+    padding-bottom: 600px;
     margin-top: var(--margin-top-quiz-page);
 }
 
