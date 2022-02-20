@@ -84,7 +84,7 @@ function renderMyQuiz(response) {
         </div>
         <img src="${quiz.image}" alt="imagem-quiz"/>
         <p><span>${quiz.title}</span></p>
-        <div class="opc">
+        <div onclick="nula()" class="opc">
           <img src="../img/Vector-white.svg" alt="Editar">
           <ion-icon name="trash-outline"></ion-icon>
         </div>
@@ -657,4 +657,8 @@ function storeQuizId(id) {
   dataConversion.push(id);
   dataConversion = JSON.stringify(dataConversion);
   localStorage.setItem('myLocal', dataConversion);
+}
+
+function nula() {
+
 }

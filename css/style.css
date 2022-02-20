@@ -150,7 +150,8 @@ div.opc ion-icon{
     color: #fff;
 }
 
-div.opc ion-icon:hover {
+div.opc ion-icon:hover,
+div.opc img:hover {
     cursor: pointer;
 }
 
