@@ -676,7 +676,7 @@ function showScore() {
   quizPage.innerHTML += `
   <div class="quiz-result">
     <button onclick="resetQuiz()">Reiniciar Quizz</button>
-    <button onclick="returnHome()">Voltar para home</button>
+    <button onclick="returnHome()" class="btn-return-home">Voltar para home</button>
   </div>`;
   //quizPage.querySelector('.show-score').scrollIntoView();
 }
