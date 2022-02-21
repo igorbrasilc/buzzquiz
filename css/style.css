@@ -6,7 +6,7 @@ html {
 *,
 *:before,
 *:after {
-    transition: 800ms;
+    transition: 300ms;
     box-sizing: border-box;
     /* variáveis globais */
     --color-bg-header: #EC362D;

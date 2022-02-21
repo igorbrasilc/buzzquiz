@@ -41,12 +41,23 @@ function quizFilter(promise) {
 
 
   let storedQuizzes = JSON.parse(localStorage.getItem('myLocal'));
+  if (!storedQuizzes) storedQuizzes = [];
+
   quizzes.forEach(quizz => {
     const id = quizz.id;
-    if (!storedQuizzes) storedQuizzes = [];
+    let containMyQuiz = false;
 
-    if(storedQuizzes.indexOf(id) >= 0) myQuizzes.push(quizz);
-    else serveQuizzes.push(quizz);
+    for(let i = 0; i < storedQuizzes.length; i++){
+      objQuiz = storedQuizzes[i];
+      
+      if(objQuiz.id === id){        
+        myQuizzes.push({quiz: quizz, key: objQuiz.key});
+        containMyQuiz = true;
+        break;
+      }
+    }
+
+    if(!containMyQuiz) serveQuizzes.push(quizz);
   })
 
   // Se tiver algum quizz próprio
@@ -69,16 +80,17 @@ function containQuiz(){
 function renderMyQuiz(response) {
   const containerAllQuizzes = document.querySelector(".my-quizzes .all-quizzes-container");
 
-  response.forEach(quiz => {
+  response.forEach(objQuiz => {
+    const quiz = objQuiz.quiz;
     containerAllQuizzes.innerHTML += `
-      <article onclick="loadQuizFromServer(${quiz.id})">
-        <div class="bg-gradient">
+      <article>
+        <div id="${quiz.id}" class="bg-gradient">
         </div>
         <img src="${quiz.image}" alt="imagem-quiz"/>
         <p><span>${quiz.title}</span></p>
-        <div onclick="nula()" class="opc">
-          <img src="../img/Vector-white.svg" alt="Editar">
-          <ion-icon name="trash-outline"></ion-icon>
+        <div class="opc">
+          <img id="${quiz.id}" class="edit" src="../img/Vector-white.svg" alt="Editar">
+          <ion-icon id="${quiz.id}-${objQuiz.key}" class="delete" name="trash-outline"></ion-icon>
         </div>
       </article>
     `;
@@ -93,8 +105,8 @@ function renderQuiz(response) {
 
   response.forEach(quiz => {
     containerAllQuizzes.innerHTML += `
-    <article onclick="loadQuizFromServer(${quiz.id})">
-      <div class="bg-gradient">
+    <article>
+      <div id="${quiz.id}" class="bg-gradient">
       </div>
       <img src="${quiz.image}" alt="imagem-quiz"/>
       <p><span>${quiz.title}</span></p>
@@ -115,10 +127,10 @@ function createQuizScreen1() {
   pageCreate.innerHTML = `
     <h1>Comece pelo começo</h1>
     <div class="container-questions">
-        <input type="text" placeholder="Título do seu quizz" class="title">
+        <input type=text placeholder="Título do seu quizz" class=title>
         <input type="url" placeholder="URL da imagem do seu quizz" class="url">
-        <input type="text" placeholder="Quantidade de perguntas do quizz" class="question-qtd">
-        <input type="text" placeholder="Quantidade de níveis do quizz" class="level-qtd">
+        <input type=text placeholder="Quantidade de perguntas do quizz" class="question-qtd">
+        <input type=text placeholder="Quantidade de níveis do quizz" class="level-qtd">
     </div>
     <button type="submit" class="btn-create-screen-1" onclick="createQuizNextScreens(this)">Prosseguir pra criar perguntas</button>
     `;
@@ -322,17 +334,17 @@ function createQuizScreen2(questionQtd) {
     pageCreate.innerHTML += `
     <div class="container-questions hide container-q${i + 1}">
         <h1 onclick="alreadyEditedQuestion(this, ${i + 1})">Pergunta ${i + 1} <span>(Clique novamente para resumir)</span></h1>
-        <input type="text" placeholder="Texto da pergunta" class="q${i + 1}-text"/>
-        <input type="text" placeholder="Cor de fundo da pergunta" class="q${i + 1}-color"/>
+        <input type=text placeholder="Texto da pergunta" class="q${i + 1}-text"/>
+        <input type=text placeholder="Cor de fundo da pergunta" class="q${i + 1}-color"/>
         <h1>Resposta correta</h1>
-        <input type="text" placeholder="Resposta correta" class="q${i + 1}-answer"/>
+        <input type=text placeholder="Resposta correta" class="q${i + 1}-answer"/>
         <input type="url" placeholder="URL da imagem" class="q${i + 1}-answer-img"/>
         <h1>Respostas incorretas</h1>
-        <input type="text" placeholder="Resposta incorreta 1" class="q${i + 1}-wrong-answer1"/>
+        <input type=text placeholder="Resposta incorreta 1" class="q${i + 1}-wrong-answer1"/>
         <input type="url" placeholder="URL da imagem 1" class="q${i + 1}-wrong-answer-img1"/>
-        <input type="text" placeholder="Resposta incorreta 2" class="q${i + 1}-wrong-answer2"/>
+        <input type=text placeholder="Resposta incorreta 2" class="q${i + 1}-wrong-answer2"/>
         <input type="url" placeholder="URL da imagem 2" class="q${i + 1}-wrong-answer-img2"/>
-        <input type="text" placeholder="Resposta incorreta 3" class="q${i + 1}-wrong-answer3"/>
+        <input type=text placeholder="Resposta incorreta 3" class="q${i + 1}-wrong-answer3"/>
         <input type="url" placeholder="URL da imagem 3" class="q${i + 1}-wrong-answer-img3"/>
     </div>
     <div class="edit-question id${i + 1}" onclick="editQuestion(this, ${i + 1})">
@@ -355,10 +367,10 @@ function createQuizScreen3(levelQtd) {
     pageCreate.innerHTML += `
     <div class="container-questions hide container-q${i + 1}">
         <h1 onclick="alreadyEditedQuestion(this, ${i + 1})">Nível ${i + 1} <span>(Clique novamente para resumir)</span></h1>
-        <input type="text" placeholder="Título do nível" class="level${i + 1}-title"/>
+        <input type=text placeholder="Título do nível" class="level${i + 1}-title"/>
         <input type="number" placeholder="% de acerto mínima" class="level${i + 1}-rate"/>
         <input type="url" placeholder="URL da imagem do nível" class="level${i + 1}-img"/>
-        <input type="text" placeholder="Descrição do nivel" class="level${i + 1}-description description"/>
+        <input type=text placeholder="Descrição do nivel" class="level${i + 1}-description description"/>
     </div>
     <div class="edit-question id${i + 1}" onclick="editQuestion(this, ${i + 1})">
         <h1>Nível ${i + 1}</h1>
@@ -373,8 +385,9 @@ function createQuizScreen3(levelQtd) {
 function createQuizScreen4() {
   const promise = axios.post(`${CONSTAPI}/quizzes`, CREATEDQUIZOBJECT);
   promise.then(quiz => {
+    const quizData = quiz.data;
 
-    storeQuizId(quiz.data.id);
+    storeQuizId(quizData.id, quizData.key);
 
     const pageCreate = document.querySelector(".create-quiz-page");
     pageCreate.innerHTML = `
@@ -388,7 +401,8 @@ function createQuizScreen4() {
     <button type="submit" class="btn-access-quiz-created" onclick="loadQuizFromServer(${quiz.data.id})">Acessar Quizz</button>
     <p onclick="returnHome()">Voltar pra home</p>
     `;
-  })
+  });
+
   promise.catch(error => {
     alert("Deu erro na postagem do seu quizz");
     console.error(error.response);
@@ -665,7 +679,7 @@ function loading() {
 
 
 /* Amazenar informações */
-function storeQuizId(id) {
+function storeQuizId(id, key) {
   const dataStoring = localStorage.getItem('myLocal');
   let dataConversion = [];
 
@@ -673,11 +687,64 @@ function storeQuizId(id) {
     dataConversion = JSON.parse(dataStoring);
   }
 
-  dataConversion.push(id);
+  dataConversion.push({id: id, key: key});
   dataConversion = JSON.stringify(dataConversion);
   localStorage.setItem('myLocal', dataConversion);
 }
 
-function nula() {
+window.addEventListener('click', listenToClick);
 
+function listenToClick(e){
+  const element = e.target;
+  const id = element.id;
+  // Clique em um quiz
+  if(element.classList.contains('bg-gradient')){
+    loadQuizFromServer(id);
+  }
+
+  // Clique em deletar
+  if(element.classList.contains('delete')){
+    if(window.confirm('Você deseja realmente apagar esse quiz?')){
+      const split = id.split('-');
+      const idQuiz = parseInt(split[0]);
+      const keyQuiz = split[1];
+
+      promise = axios.delete(`${CONSTAPI}/quizzes/${idQuiz}`,{header:{'Secret-key': `${keyQuiz}` }})
+
+
+
+
+
+
+      /* const promise = axios.post(`${CONSTAPI}/quizzes`, 
+      {title:"Texto texto texto texto texto texto",
+      image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+
+      questions:[{title:"Texto texto texto texto texto",color:"#875678",answers:[{text:"sim",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      isCorrectAnswer:true},{text:"nao",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      isCorrectAnswer:false},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      isCorrectAnswer:false},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      isCorrectAnswer:false}]},{title:"Texto texto texto texto texto",color:"#874356",answers:[{text:"sim",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      isCorrectAnswer:true},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      isCorrectAnswer:false},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      isCorrectAnswer:false},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      isCorrectAnswer:false}]},{title:"Texto texto texto texto texto",color:"#456789",answers:[{text:"sim",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      isCorrectAnswer:true},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      isCorrectAnswer:false},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      isCorrectAnswer:false},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      isCorrectAnswer:false}]}],levels:[{title:"Texto texto texto texto texto",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      text:"Texto texto texto texto textoTexto texto texto texto texto",minValue:"0"},{title:"Texto texto texto texto texto",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
+      text:"Texto texto texto texto textoTexto texto texto texto texto",minValue:"100"}]});
+
+      promise.then(quiz => {
+        const data = quiz.data;
+
+        storeQuizId(data.id, data.key);
+      });*/
+
+      promise.then(r => console.log(r));
+      promise.catch(r => console.log(r));
+    }
+  }
 }
+
