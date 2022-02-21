@@ -17,15 +17,14 @@
 
 <body>
 
-    <!-- Aqui vai o header -->
     <header>
         <span onclick="returnHome()">BuzzQuizz</span>
         <span class="quiz-page-header hide">
             <h2></h2>
         </span>
     </header>
-
-    <!-- Aqui vai o container dos quizzes próprios  -->
+    
+    
     <main>
         <section class="my-quizzes">
             <article class="create-first-quiz">
@@ -37,23 +36,19 @@
                 <ion-icon  onclick="createQuizScreen1()" name="add-circle" data-identifier="create-quizz"></ion-icon>
             </div>
             <div class="all-quizzes-container" data-identifier="user-quizzes">
-                <!-- inserido dinamicamente -->
             </div>
         </section>
         <section class="all-quizzes">
             <p>Todos os Quizzes</p>
             <div class="all-quizzes-container" data-identifier="general-quizzes"> 
-                <!-- inserido dinamicamente -->
             </div>
         </section>
     </main>
-
+    
     <section class="quiz-page hide">
-        <!-- inserido dinamicamente -->
     </section>
 
     <section class="create-quiz-page">
-        <!-- inserido dinamicamente -->
     </section>
 
     <section class="load-screen hide">

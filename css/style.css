@@ -646,7 +646,7 @@ div button:last-child {
     font-style: italic;
     font-size: 19px;
     line-height: 22px;
-    color: var(--color-bg-header);
+    color: rgb(43, 39, 39);
     border-radius: 5px;
     border: 1px solid #D1D1D1;
 }
