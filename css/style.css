@@ -432,7 +432,7 @@ span.quiz-page-header {
     background-color: #fff;
 }
 
-.quiz-page article header {
+section.quiz-page article>header {
     width: 100%;
     height: var(--height-header-question);
     padding: 5px;
@@ -449,6 +449,7 @@ span.quiz-page-header {
     text-align: center;
     word-break: break-all;
 
+    background-color: none;
     color: #fff;
 }
 

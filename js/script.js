@@ -577,9 +577,9 @@ function answerSelection(answerSelected, isCorrectAnswer) {
         const interval = setInterval(() => {
           if(article.clientHeight + 26 < count) clearInterval(interval);
           console.log(count)
-          count += 10;
-          window.scrollBy(0, 10);
-        }, 8);
+          count += 14;
+          window.scrollBy(0, 14);
+        }, 6);
       }, 2000);
 
       questionList.push({ question: documentSection, isCorrectAnswer: isCorrectAnswer });
@@ -610,7 +610,7 @@ function answerSelection(answerSelected, isCorrectAnswer) {
       }
 
       if (qtdQuestions === questionList.length) {
-        setTimeout(showScore, 2300);
+        setTimeout(showScore, 2200);
       }
     }
   }
