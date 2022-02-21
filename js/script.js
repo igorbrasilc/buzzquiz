@@ -127,7 +127,7 @@ function createQuizScreen1() {
   pageCreate.innerHTML = `
     <h1>Comece pelo começo</h1>
     <div class="container-questions">
-        <input type=text placeholder="Título do seu quizz" class=title>
+        <input type=text placeholder="Título do seu quizz" class="title">
         <input type="url" placeholder="URL da imagem do seu quizz" class="url">
         <input type=text placeholder="Quantidade de perguntas do quizz" class="question-qtd">
         <input type=text placeholder="Quantidade de níveis do quizz" class="level-qtd">
@@ -161,7 +161,14 @@ function createQuizNextScreens(btn) {
       CREATEDQUIZOBJECT.image = inputURL;
       createQuizScreen2(QUESTION_QTD);
     } else {
-      alert("Preencha os dados corretamente!");
+      alert(`
+      Preencha os dados corretamente!
+
+      O título deve ter entre 20 e 65 caracteres;
+      A URL da imagem deve ser valida na nossa verificação;
+      O minimo de perguntas deve ser 3;
+      O minimo de niveis deve ser 2;
+      `);
     }
   }
 
@@ -218,6 +225,8 @@ function createQuizNextScreens(btn) {
 
           if (urlOK === true) {
             countAnswerURLOK += 1;
+          } else {
+            alert(`Verifique a URL da imagem da pergunta ${i + 1}`);
           }
         }
       }
@@ -226,14 +235,12 @@ function createQuizNextScreens(btn) {
         answerQtdOK = true;
       } else {
         answerQtdOK = false;
-        alert("Deve ter no minimo 2 respostas escritas em cada pergunta");
       }
 
       if (countAnswerURLOK === countAnswerNotNull) {
         answerURLOK = true;
       } else {
         answerURLOK = false;
-        alert(`Verifique a URL da imagem da pergunta ${i + 1}`);
       }
 
       if (titleQuestionOK && colorOK && answerURLOK && answerQtdOK) {
@@ -256,7 +263,14 @@ function createQuizNextScreens(btn) {
       CREATEDQUIZOBJECT.questions = questions;
       createQuizScreen3(LEVEL_QTD);
     } else {
-      alert("Preencha os dados corretamente!");
+      alert(`
+      Preencha os dados corretamente!
+      
+      O texto da pergunta deve ter no mínimo 20 caracteres;
+      A cor deve ser hexadecimal, ou seja, deve começar com # e ter 6 números ou letras de A a F dentro;
+      Precisa de no mínimo 2 textos de pergunta preenchidos;
+      A URL deve ser válida;
+      `);
       questionsValidated = 0;
     }
   }
@@ -318,8 +332,6 @@ function createQuizNextScreens(btn) {
 
       if (titleLevelOK && levelRateOK && levelURLOK && levelDescriptionOK) {
         levelsValidated += 1;
-      } else {
-        alert(`Preencha corretamente o level ${i + 1}`);
       }
     }
 
@@ -328,7 +340,14 @@ function createQuizNextScreens(btn) {
       createQuizScreen4();
     } else {
       levelsValidated = 0;
-      alert("Preencha os dados novamente");
+      alert(`
+      Preencha os dados corretamente!
+      
+      O título do quiz deve ter no mínimo 10 caracteres;
+      Precisa ter pelo menos um nível com 0% de acerto mínima, e o número precisa ser de 0 a 100;
+      A descrição do nível precisa de ao menos 30 caracteres;
+      A URL deve ser válida;
+      `);
     }
   }
 
@@ -641,7 +660,7 @@ function showScore() {
     }
   })
 
-  const levelTitle = `${hitPercent} de acerto: ${currentLevel.title}`;
+  const levelTitle = `${hitPercent}% de acerto: ${currentLevel.title}`;
   const levelColor = currentLevel.color;
   const levelImage = currentLevel.image;
   const levelText = currentLevel.text;
