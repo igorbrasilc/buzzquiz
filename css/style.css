@@ -694,6 +694,11 @@ div button:last-child {
     background-color: rgba(248, 42, 42, 0.57)
 }
 
+.created-quiz-return-home:hover {
+    color: var(--color-bg-header);
+    cursor: pointer;
+}
+
 
 /* Loadding screen */
 .load-screen {

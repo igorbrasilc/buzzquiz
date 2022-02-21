@@ -196,9 +196,8 @@ function createQuizNextScreens(btn) {
       let countAnswerNotNull = 0;
       let countAnswerURLOK = 0;
 
-
       for (let j = 0; j < 4; j++) {
-        console.log(questions[i].answers[j].text);
+
         if (questions[i].answers[j].text !== '') {
           countAnswerNotNull += 1;
 
@@ -208,9 +207,8 @@ function createQuizNextScreens(btn) {
           if (urlOK === true) {
             countAnswerURLOK += 1;
           }
+        }
       }
-      console.log(countAnswerNotNull);
-      console.log(countAnswerURLOK);
 
       if (countAnswerNotNull >= 2) {
         answerQtdOK = true;
@@ -232,6 +230,17 @@ function createQuizNextScreens(btn) {
     }
 
     if (questionsValidated * 1 === QUESTION_QTD * 1) {
+      for (let i = 0; i < questions.length; i++) {
+        const answersNotNull = questions[i].answers.filter(answer => {
+          if (answer.text !== '') {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        questions[i].answers = answersNotNull;
+      }
+
       CREATEDQUIZOBJECT.questions = questions;
       createQuizScreen3(LEVEL_QTD);
     } else {
@@ -310,7 +319,8 @@ function createQuizNextScreens(btn) {
       alert("Preencha os dados novamente");
     }
   }
-}
+
+
 }
 
 function createQuizScreen2(questionQtd) {
@@ -387,13 +397,15 @@ function createQuizScreen4() {
       <p><span>${quiz.data.title}</span></p>
     </article>
     <button type="submit" class="btn-access-quiz-created" onclick="loadQuizFromServer(${quiz.data.id})">Acessar Quizz</button>
-    <p onclick="returnHome()">Voltar pra home</p>
+    <p onclick="returnHome()" class="created-quiz-return-home">Voltar pra home</p>
     `;
   })
   promise.catch(error => {
     alert("Deu erro na postagem do seu quizz");
     console.error(error.response);
   })
+
+  
 }
 
 function editQuestion(question, id) {
