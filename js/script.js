@@ -20,7 +20,7 @@ let correctAnswers = 0;
 
 function openQuiz() {
   const quizHeader = document.querySelector(".quiz-page-header");
-  MAIN.classList.toggle("hide");
+  MAIN.classList.add("hide");
   quizPage.classList.toggle("hide");
   quizHeader.classList.toggle("hide");
 }
@@ -242,6 +242,17 @@ function createQuizNextScreens(btn) {
     }
 
     if (questionsValidated * 1 === QUESTION_QTD * 1) {
+      for (let i = 0; i < questions.length; i++) {
+        const answersNotNull = questions[i].answers.filter(answer => {
+          if (answer.text !== '') {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        questions[i].answers = answersNotNull;
+      }
+
       CREATEDQUIZOBJECT.questions = questions;
       createQuizScreen3(LEVEL_QTD);
     } else {
@@ -334,20 +345,20 @@ function createQuizScreen2(questionQtd) {
     pageCreate.innerHTML += `
     <div class="container-questions hide container-q${i + 1}">
         <h1 onclick="alreadyEditedQuestion(this, ${i + 1})">Pergunta ${i + 1} <span>(Clique novamente para resumir)</span></h1>
-        <input type=text placeholder="Texto da pergunta" class="q${i + 1}-text"/>
-        <input type=text placeholder="Cor de fundo da pergunta" class="q${i + 1}-color"/>
+        <input type="text" placeholder="Texto da pergunta" class="q${i + 1}-text" data-identifier="question"/>
+        <input type="text" placeholder="Cor de fundo da pergunta" class="q${i + 1}-color" data-identifier="question"/>
         <h1>Resposta correta</h1>
-        <input type=text placeholder="Resposta correta" class="q${i + 1}-answer"/>
-        <input type="url" placeholder="URL da imagem" class="q${i + 1}-answer-img"/>
+        <input type="text" placeholder="Resposta correta" class="q${i + 1}-answer" data-identifier="question"/>
+        <input type="url" placeholder="URL da imagem" class="q${i + 1}-answer-img" data-identifier="question"/>
         <h1>Respostas incorretas</h1>
-        <input type=text placeholder="Resposta incorreta 1" class="q${i + 1}-wrong-answer1"/>
-        <input type="url" placeholder="URL da imagem 1" class="q${i + 1}-wrong-answer-img1"/>
-        <input type=text placeholder="Resposta incorreta 2" class="q${i + 1}-wrong-answer2"/>
-        <input type="url" placeholder="URL da imagem 2" class="q${i + 1}-wrong-answer-img2"/>
-        <input type=text placeholder="Resposta incorreta 3" class="q${i + 1}-wrong-answer3"/>
-        <input type="url" placeholder="URL da imagem 3" class="q${i + 1}-wrong-answer-img3"/>
+        <input type="text" placeholder="Resposta incorreta 1" class="q${i + 1}-wrong-answer1" data-identifier="question"/>
+        <input type="url" placeholder="URL da imagem 1" class="q${i + 1}-wrong-answer-img1" data-identifier="question"/>
+        <input type="text" placeholder="Resposta incorreta 2" class="q${i + 1}-wrong-answer2" data-identifier="question"/>
+        <input type="url" placeholder="URL da imagem 2" class="q${i + 1}-wrong-answer-img2" data-identifier="question"/>
+        <input type="text" placeholder="Resposta incorreta 3" class="q${i + 1}-wrong-answer3" data-identifier="question"/>
+        <input type="url" placeholder="URL da imagem 3" class="q${i + 1}-wrong-answer-img3" data-identifier="question"/>
     </div>
-    <div class="edit-question id${i + 1}" onclick="editQuestion(this, ${i + 1})">
+    <div class="edit-question id${i + 1}" onclick="editQuestion(this, ${i + 1})" data-identifier="expand">
         <h1>Pergunta ${i + 1}</h1>
         <img src="./img/Vector.svg" alt="edit-question-icon"/>
     </div>
@@ -367,12 +378,13 @@ function createQuizScreen3(levelQtd) {
     pageCreate.innerHTML += `
     <div class="container-questions hide container-q${i + 1}">
         <h1 onclick="alreadyEditedQuestion(this, ${i + 1})">Nível ${i + 1} <span>(Clique novamente para resumir)</span></h1>
-        <input type=text placeholder="Título do nível" class="level${i + 1}-title"/>
-        <input type="number" placeholder="% de acerto mínima" class="level${i + 1}-rate"/>
-        <input type="url" placeholder="URL da imagem do nível" class="level${i + 1}-img"/>
-        <input type=text placeholder="Descrição do nivel" class="level${i + 1}-description description"/>
+
+        <input type="text" placeholder="Título do nível" class="level${i + 1}-title" data-identifier="level"/>
+        <input type="number" placeholder="% de acerto mínima" class="level${i + 1}-rate" data-identifier="level"/>
+        <input type="url" placeholder="URL da imagem do nível" class="level${i + 1}-img" data-identifier="level"/>
+        <input type="text" placeholder="Descrição do nivel" class="level${i + 1}-description description" data-identifier="level"/>
     </div>
-    <div class="edit-question id${i + 1}" onclick="editQuestion(this, ${i + 1})">
+    <div class="edit-question id${i + 1}" onclick="editQuestion(this, ${i + 1})" data-identifier="expand">
         <h1>Nível ${i + 1}</h1>
         <img src="./img/Vector.svg" alt="edit-question-icon"/>
     </div>
@@ -399,7 +411,7 @@ function createQuizScreen4() {
       <p><span>${quiz.data.title}</span></p>
     </article>
     <button type="submit" class="btn-access-quiz-created" onclick="loadQuizFromServer(${quiz.data.id})">Acessar Quizz</button>
-    <p onclick="returnHome()">Voltar pra home</p>
+    <p onclick="returnHome()" class="created-quiz-return-home">Voltar pra home</p>
     `;
   });
 
@@ -489,7 +501,7 @@ function assembleQuiz(quizFromServer) {
 function assembleQuestions(question) {
   return `
     <article>
-        <header>${question.title}?</header>
+        <header data-identifier="question">${question.title}?</header>
         <section>
         ${assembleAnswer(question.answers)}
         </section>
@@ -528,7 +540,7 @@ function assembleAnswer(answers) {
 
 function answerStruture(isCorrect, img, describe) {
   return `
-    <div id="${isCorrect}" class="answer-quiz" onclick="answerSelection(this, this.id)">
+    <div id="${isCorrect}" class="answer-quiz" onclick="answerSelection(this, this.id)" data-identifier="answer">
       <img src="${img}" alt="">
       <p>${describe}</p>
       <div class="white-cover"></div>
@@ -634,7 +646,7 @@ function showScore() {
   const levelImage = currentLevel.image;
   const levelText = currentLevel.text;
   quizPage.innerHTML += `
-  <article class="show-score">
+  <article class="show-score" data-identifier="quizz-result">
     <header>${levelTitle}</header>
       <section>
       <img src="${levelImage}"></img>
