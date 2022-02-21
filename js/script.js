@@ -6,7 +6,7 @@ let CREATEDQUIZOBJECT = {
   questions: null,
   levels: null
 };
-const CONSTAPI = "https://mock-api.driven.com.br/api/v4/buzzquizz";
+const CONSTAPI = "https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes";
 let QUESTION_QTD = 0;
 let LEVEL_QTD = 0;
 
@@ -26,7 +26,7 @@ function openQuiz() {
 }
 
 // Disponibilização dos quizzes do servidor ao entrar na tela inicial:
-const promiseGetQuizzes = axios.get(`${CONSTAPI}/quizzes`);
+const promiseGetQuizzes = axios.get(`${CONSTAPI}`);
 loading();
 promiseGetQuizzes.then(quizFilter);
 promiseGetQuizzes.catch(error => {
@@ -62,6 +62,8 @@ function quizFilter(promise) {
 
   // Se tiver algum quizz próprio
   if(myQuizzes.length){
+    console.log(`my quizz`)
+    console.log(myQuizzes.length);
     containQuiz(); 
     renderMyQuiz(myQuizzes);
   } 
@@ -90,7 +92,7 @@ function renderMyQuiz(response) {
         <p><span>${quiz.title}</span></p>
         <div class="opc">
           <img id="${quiz.id}" class="edit" src="../img/Vector-white.svg" alt="Editar">
-          <ion-icon id="${quiz.id}-${objQuiz.key}" class="delete" name="trash-outline"></ion-icon>
+          <ion-icon id="${quiz.id}/${objQuiz.key}" class="delete" name="trash-outline"></ion-icon>
         </div>
       </article>
     `;
@@ -395,11 +397,11 @@ function createQuizScreen3(levelQtd) {
 }
 
 function createQuizScreen4() {
-  const promise = axios.post(`${CONSTAPI}/quizzes`, CREATEDQUIZOBJECT);
+  const promise = axios.post(`${CONSTAPI}`, CREATEDQUIZOBJECT);
   promise.then(quiz => {
     const quizData = quiz.data;
 
-    storeQuizId(quizData.id, quizData.key);
+    storeQuiz(quizData.id, quizData.key);
 
     const pageCreate = document.querySelector(".create-quiz-page");
     pageCreate.innerHTML = `
@@ -458,8 +460,8 @@ function validColorHEX(str) {
 let qtdQuestions = 0;
 
 function loadQuizFromServer(id) {
-  console.log(`${CONSTAPI}/quizzes/${id}`);
-  const promise = axios.get(`${CONSTAPI}/quizzes/${id}`);
+  console.log(`${CONSTAPI}/${id}`);
+  const promise = axios.get(`${CONSTAPI}/${id}`);
   loading();
   promise.then(assembleQuiz);
   promise.catch(console.error());
@@ -691,7 +693,7 @@ function loading() {
 
 
 /* Amazenar informações */
-function storeQuizId(id, key) {
+function storeQuiz(id, key) {
   const dataStoring = localStorage.getItem('myLocal');
   let dataConversion = [];
 
@@ -704,11 +706,29 @@ function storeQuizId(id, key) {
   localStorage.setItem('myLocal', dataConversion);
 }
 
+function removeQuiz(id){
+  const dataStoring = localStorage.getItem('myLocal');
+  let dataConversion = JSON.parse(dataStoring);
+
+  dataConversion.filter(obj =>{
+    if(obj.id === id)return false;
+    else return true;
+  })
+
+  dataConversion = JSON.stringify(dataConversion);
+  localStorage.setItem('myLocal', dataConversion);  
+}
+
+
+
+
+// Listen to click event
 window.addEventListener('click', listenToClick);
 
 function listenToClick(e){
   const element = e.target;
   const id = element.id;
+
   // Clique em um quiz
   if(element.classList.contains('bg-gradient')){
     loadQuizFromServer(id);
@@ -717,54 +737,18 @@ function listenToClick(e){
   // Clique em deletar
   if(element.classList.contains('delete')){
     if(window.confirm('Você deseja realmente apagar esse quiz?')){
-      const split = id.split('-');
+      const split = id.split('/');
       const idQuiz = parseInt(split[0]);
       const keyQuiz = split[1];
 
-      console.log(`idQuiz => Tipo: ${typeof(idQuiz)} Value: ${idQuiz}`);
-      console.log(`keyQuiz => Tipo: ${typeof(keyQuiz)} Value: ${keyQuiz}`);
+      promise = axios.delete(`${CONSTAPI}/${idQuiz}`, 
+          {headers: {"Secret-Key": keyQuiz}});
 
-      promise = axios.delete(`${CONSTAPI}/quizzes/${idQuiz}`, 
-        {
-          headers: {
-            "Secret-Key": keyQuiz
-          }
-        }
-      );
-
-
-        
-        promise.then(r => console.log(r));
-        promise.catch(r => console.log(r));
-
-
-
-      /* const promise = axios.post(`${CONSTAPI}/quizzes`, 
-      {title:"Texto texto texto texto texto texto",
-      image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-
-      questions:[{title:"Texto texto texto texto texto",color:"#875678",answers:[{text:"sim",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      isCorrectAnswer:true},{text:"nao",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      isCorrectAnswer:false},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      isCorrectAnswer:false},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      isCorrectAnswer:false}]},{title:"Texto texto texto texto texto",color:"#874356",answers:[{text:"sim",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      isCorrectAnswer:true},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      isCorrectAnswer:false},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      isCorrectAnswer:false},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      isCorrectAnswer:false}]},{title:"Texto texto texto texto texto",color:"#456789",answers:[{text:"sim",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      isCorrectAnswer:true},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      isCorrectAnswer:false},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      isCorrectAnswer:false},{text:"não",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      isCorrectAnswer:false}]}],levels:[{title:"Texto texto texto texto texto",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      text:"Texto texto texto texto textoTexto texto texto texto texto",minValue:"0"},{title:"Texto texto texto texto texto",image:"https://media.istockphoto.com/photos/digital-eye-wave-lines-stock-background-stock-video-picture-id1226241649?b=1&k=20&m=1226241649&s=170667a&w=0&h=lXhD5bdn_YT50-ItctUnqB2WiGZ8Jye1GZHjvDsb2Xo=",
-      text:"Texto texto texto texto textoTexto texto texto texto texto",minValue:"100"}]});
-
-      promise.then(quiz => {
-        const data = quiz.data;
-
-        storeQuizId(data.id, data.key);
-      }); */
-
+          promise.then(()=>{
+            removeQuiz(idQuiz);
+            returnHome();
+          });
+      promise.catch(r => console.log(r));
     }
   }
 }

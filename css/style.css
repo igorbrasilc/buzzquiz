@@ -65,7 +65,7 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 5;
+    z-index: 6;
     background-color: var(--color-bg-header);
 
     /* transition: 1000ms; */
@@ -708,7 +708,7 @@ div button:last-child {
     align-items: center;
 
     position: fixed;
-    z-index: 3;
+    z-index: 5;
     top: var(--height-header-span);
     bottom: 0;
 
