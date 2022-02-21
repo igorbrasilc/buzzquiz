@@ -20,7 +20,7 @@ let correctAnswers = 0;
 
 function openQuiz() {
   const quizHeader = document.querySelector(".quiz-page-header");
-  MAIN.classList.toggle("hide");
+  MAIN.classList.add("hide");
   quizPage.classList.toggle("hide");
   quizHeader.classList.toggle("hide");
 }
