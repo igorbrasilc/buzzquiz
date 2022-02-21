@@ -62,8 +62,6 @@ function quizFilter(promise) {
 
   // Se tiver algum quizz próprio
   if(myQuizzes.length){
-    console.log(`my quizz`)
-    console.log(myQuizzes.length);
     containQuiz(); 
     renderMyQuiz(myQuizzes);
   } 
@@ -479,7 +477,6 @@ function validColorHEX(str) {
 let qtdQuestions = 0;
 
 function loadQuizFromServer(id) {
-  console.log(`${CONSTAPI}/${id}`);
   const promise = axios.get(`${CONSTAPI}/${id}`);
   loading();
   promise.then(assembleQuiz);
@@ -587,7 +584,6 @@ function answerSelection(answerSelected, isCorrectAnswer) {
   documentSection = documentSection.parentNode;
 
   // se não foi escolhida nenhuma resposta do cartão
-  console.log(' func é igual? ' + isSelected(documentSection));
   if (!isSelected(documentSection)) {
     // não finalizou ainda
     if (questionList.length <= qtdQuestions) {
@@ -597,7 +593,6 @@ function answerSelection(answerSelected, isCorrectAnswer) {
         let count = 0;
         const interval = setInterval(() => {
           if(article.clientHeight + 26 < count) clearInterval(interval);
-          console.log(count)
           count += 14;
           window.scrollBy(0, 14);
         }, 6);
