@@ -30,19 +30,19 @@
         <section class="my-quizzes">
             <article class="create-first-quiz">
                 <p>Você não criou nenhum quizz ainda :(</p>
-                <p><span onclick="createQuizScreen1()">Criar Quizz</span></p>
+                <p><span onclick="createQuizScreen1()" data-identifier="create-quizz">Criar Quizz</span></p>
             </article>
             <div class="created-quizzes-header hide">
                 <p>Seus Quizzes</p>
-                <ion-icon  onclick="createQuizScreen1()" name="add-circle"></ion-icon>
+                <ion-icon  onclick="createQuizScreen1()" name="add-circle" data-identifier="create-quizz"></ion-icon>
             </div>
-            <div class="all-quizzes-container">
+            <div class="all-quizzes-container" data-identifier="user-quizzes">
                 <!-- inserido dinamicamente -->
             </div>
         </section>
         <section class="all-quizzes">
             <p>Todos os Quizzes</p>
-            <div class="all-quizzes-container">
+            <div class="all-quizzes-container" data-identifier="general-quizzes"> 
                 <!-- inserido dinamicamente -->
             </div>
         </section>
